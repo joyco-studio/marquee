@@ -175,7 +175,6 @@ const ConfigMarquee = () => {
 
         <input type="range" defaultValue={1} min="1" max="100" className="thumb-slider-input" ref={sliderInputRef} />
 
-        <button onClick={handleInitialize}>Initialize</button>
         <button onClick={handlePlayStop}>Play/Pause</button>
       </div>
     </div>
