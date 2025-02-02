@@ -115,10 +115,12 @@ class Marquee {
       return
     }
 
-    if (this.speedFactor === newSpeedFactor) return
+    const speedWithDirection = this.speedFactor * this.direction
+
+    if (speedWithDirection === newSpeedFactor) return
 
     const sign = Math.sign(newSpeedFactor)
-    const hasChangedSign = sign !== Math.sign(this.speedFactor * this.direction)
+    const hasChangedSign = sign !== Math.sign(speedWithDirection)
 
     if (!hasChangedSign) {
       this.direction = sign === 1 ? 1 : -1

@@ -1,11 +1,75 @@
-import { useEffect, useRef } from 'react'
-import { Marquee as ReactMarquee, useMarquee } from '@joycostudio/marquee/react'
+import { useEffect, useRef, useState } from 'react'
+import { useMarquee } from '@joycostudio/marquee/react'
 
 export function meta() {
   return [{ title: 'New React Router App' }, { name: 'description', content: 'Welcome to React Router!' }]
 }
 
 const DEFAULT_SPEED = 300
+
+const useScrollVelocity = () => {
+  const [velocity, setVelocity] = useState(0)
+  const lastScrollRef = useRef(0)
+  const lastTimeRef = useRef(Date.now())
+  const lastScrollEventRef = useRef(Date.now())
+  const rafRef = useRef<number>(null)
+
+  useEffect(() => {
+    const onScroll = () => {
+      const currentTime = Date.now()
+      const timeDelta = currentTime - lastTimeRef.current
+      const currentScroll = window.scrollY
+      const scrollDelta = currentScroll - lastScrollRef.current
+
+      // Calculate velocity (pixels per millisecond)
+      const instantVelocity = scrollDelta / Math.max(1, timeDelta)
+
+      // Smooth out the velocity using exponential moving average
+      setVelocity((prevVelocity) => {
+        const smoothingFactor = 0.1 // Adjust this value between 0 and 1 for different smoothing levels
+        return prevVelocity * (1 - smoothingFactor) + instantVelocity * smoothingFactor
+      })
+
+      lastScrollRef.current = currentScroll
+      lastTimeRef.current = currentTime
+      lastScrollEventRef.current = currentTime
+    }
+
+    const decayVelocity = () => {
+      const currentTime = Date.now()
+      const timeSinceLastScroll = currentTime - lastScrollEventRef.current
+
+      // Only start decay after 50ms of no scroll events
+      if (timeSinceLastScroll > 50) {
+        setVelocity((prevVelocity) => {
+          // Apply exponential decay
+          const decayFactor = 0.95
+          const newVelocity = prevVelocity * decayFactor
+
+          // Stop RAF when velocity is negligible
+          if (Math.abs(newVelocity) < 0.0001) {
+            return 0
+          }
+          return newVelocity
+        })
+      }
+
+      rafRef.current = requestAnimationFrame(decayVelocity)
+    }
+
+    window.addEventListener('scroll', onScroll)
+    rafRef.current = requestAnimationFrame(decayVelocity)
+
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      if (rafRef.current) {
+        cancelAnimationFrame(rafRef.current)
+      }
+    }
+  }, [])
+
+  return velocity
+}
 
 const MarqueeContent = () => {
   return (
@@ -19,15 +83,35 @@ const MarqueeContent = () => {
   )
 }
 
-export default function Home() {
-  const rootRef = useRef<HTMLDivElement>(null)
+const ScrollBoundMarquee = ({ inverted }: { inverted?: boolean }) => {
+  const velocity = useScrollVelocity()
+  const [marqueeRootRef, marquee] = useMarquee({ speed: DEFAULT_SPEED, speedFactor: 1, direction: 1 })
+
+  useEffect(() => {
+    if (!marquee) return
+    const v = velocity * (inverted ? -1 : 1)
+    const sign = Math.sign(v)
+
+    if (sign === 0) return
+
+    const cappedV = Math[sign === -1 ? 'min' : 'max'](v, sign * 1)
+    marquee.setSpeedFactor(cappedV)
+  }, [velocity])
+
+  return (
+    <div className="flex min-w-max" ref={marqueeRootRef}>
+      <MarqueeContent />
+    </div>
+  )
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const ConfigMarquee = () => {
   const sliderInputRef = useRef<HTMLInputElement>(null)
   const velocityInputRef = useRef<HTMLInputElement>(null)
   const [marqueeRootRef, marquee] = useMarquee({ speed: DEFAULT_SPEED, speedFactor: 1, direction: 1 })
 
   useEffect(() => {
-    if (!rootRef.current) return
-    if (!rootRef.current.firstChild) return
     if (!marquee) return
 
     const onWheel = (e: WheelEvent) => {
@@ -66,11 +150,6 @@ export default function Home() {
     }
   }, [])
 
-  const handleInitialize = () => {
-    if (!marquee || !rootRef.current) return
-    marquee.initialize(rootRef.current.firstChild as HTMLElement)
-  }
-
   const handlePlayStop = () => {
     if (!marquee) return
     if (marquee.playing) {
@@ -82,14 +161,9 @@ export default function Home() {
 
   return (
     <div>
-      <ReactMarquee rootClassName="my-[10vh]" speed={DEFAULT_SPEED} speedFactor={1} direction={1}>
-        <MarqueeContent />
-      </ReactMarquee>
-
-      <div className="my-[10vh] flex min-w-max" ref={marqueeRootRef}>
+      <div className="flex min-w-max" ref={marqueeRootRef}>
         <MarqueeContent />
       </div>
-
       <div className="flex gap-x-4 items-center justify-center mt-20">
         <input
           type="number"
@@ -103,6 +177,23 @@ export default function Home() {
 
         <button onClick={handleInitialize}>Initialize</button>
         <button onClick={handlePlayStop}>Play/Pause</button>
+      </div>
+    </div>
+  )
+}
+
+export default function Home() {
+  return (
+    <div className="h-[400vh] bg-gradient-to-b from-zinc-900 to-zinc-800">
+      <div className="h-screen fixed inset-0 flex flex-col justify-between">
+        <ScrollBoundMarquee inverted />
+        <ScrollBoundMarquee />
+        <ScrollBoundMarquee inverted />
+        <ScrollBoundMarquee />
+        <ScrollBoundMarquee inverted />
+        <ScrollBoundMarquee />
+        <ScrollBoundMarquee inverted />
+        <ScrollBoundMarquee />
       </div>
     </div>
   )

@@ -9,6 +9,8 @@ html,
 body {
   @apply bg-white dark:bg-zinc-950;
 
+  overscroll-behavior: none;
+
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;
   }
