@@ -1,16 +1,4 @@
-/* This is the core of the marquee library. Leveraging just JS it will animate the marquee. We will then build the implementation in React. */
-
 import { pxPerSecond, warn } from './helpers'
-
-/* 
-  On initialization this component should receive both the marquee root and the marquee content.
-  The root is the container that will contain the marquee.
-  The content is the content that will be animated.
-*/
-
-/* 
-  I like this API: https://www.npmjs.com/package/react-fast-marquee
-*/
 
 const INITIALIZATION_WARNING = 'Marquee not initialized!'
 const NO_PROGRESS_WARNING = 'There is no detected progress!'
