@@ -36,7 +36,7 @@ class Marquee {
 
   initialize(child: HTMLElement) {
     if (this.initialized) {
-      warn('Marquee already initialized')
+      warn('Marquee already initialized!')
       return
     }
     this.root.appendChild(child)
@@ -50,7 +50,10 @@ class Marquee {
   }
 
   play() {
-    if (!this.childWidth) return
+    if (!this.childWidth) {
+      warn('Marquee not initialized!')
+      return
+    }
 
     if (this.animation) {
       this.animation.play()
@@ -138,4 +141,8 @@ class Marquee {
   }
 }
 
-export { Marquee }
+const MarqueeConfig = {
+  disableWarnings: false,
+}
+
+export { Marquee, MarqueeConfig }
