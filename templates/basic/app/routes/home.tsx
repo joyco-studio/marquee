@@ -33,7 +33,7 @@ export default function Home() {
 
     const onInput = () => {
       if (!sliderInputRef.current) return
-      const v = 1 + Number(sliderInputRef.current.value) / 100
+      const v = -1 + Number(sliderInputRef.current.value) / 50
       marquee.setSpeedFactor(v)
       console.log(v)
     }

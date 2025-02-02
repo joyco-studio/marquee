@@ -68,27 +68,24 @@ class Marquee {
     // If there's an existing animation, cancel it
     this.animation?.cancel()
 
-    const initialX = direction === 1 ? 0 : -50
-    const finalX = direction === 1 ? -50 : 0
+    const duration = pxPerSecond(this.childWidth, this.speed)
+    const keyframes =
+      direction === 1
+        ? [{ transform: 'translateX(0%)' }, { transform: 'translateX(-50%)' }]
+        : [{ transform: 'translateX(-50%)' }, { transform: 'translateX(0%)' }]
 
-    this.animation = this.root.animate(
-      {
-        transform: [`translateX(${initialX}%)`, `translateX(${finalX}%)`],
-      },
-      {
-        duration: pxPerSecond(this.childWidth, this.speed),
-        easing: 'linear',
-        iterations: Infinity,
-      }
-    )
+    this.animation = this.root.animate(keyframes, {
+      duration,
+      easing: 'linear',
+      iterations: Infinity,
+    })
+
     this.animation.playbackRate = this.speedFactor
 
     this.playing = true
 
     // If startProgress is provided, set the animation to start from that point
     if (startProgress !== undefined && this.animation.effect) {
-      const timing = this.animation.effect.getTiming()
-      const duration = typeof timing.duration === 'number' ? timing.duration : 0
       this.animation.currentTime = duration * startProgress
     }
   }
@@ -102,16 +99,11 @@ class Marquee {
   setSpeed(newspeed: number) {
     if (!this.animation || !this.childWidth || !this.animation.effect) return
 
-    const timing = this.animation.effect.getTiming()
-    const currentDuration = typeof timing.duration === 'number' ? timing.duration : 0
-    const currentTime = typeof this.animation.currentTime === 'number' ? this.animation.currentTime : 0
-    const progress = currentDuration > 0 ? (currentTime % currentDuration) / currentDuration : 0
+    const timing = this.animation.effect.getComputedTiming()
 
-    // Update speed
     this.speed = newspeed
 
-    // Restart animation from the same progress point
-    this.start(this.direction, progress)
+    this.start(this.direction, timing.progress ?? undefined)
   }
 
   setSpeedFactor(v: number) {
@@ -136,8 +128,8 @@ class Marquee {
     }
     this.clonedChild = undefined
 
-    // Clear the root element
-    this.root.innerHTML = ''
+    // React will handle the cleanup of the original child and the root element
+    // this.root.innerHTML = ''
   }
 }
 
