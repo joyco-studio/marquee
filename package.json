@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "build": "tsup",
-    "dev": "tsup --watch",
+    "dev": "concurrently \"tsup --watch\" \"cd templates/basic && pnpm dev\"",
     "typecheck": "tsc --noEmit",
     "version:package": "pnpm changeset version",
     "release": "pnpm build && pnpm changeset publish",
@@ -29,6 +29,7 @@
     "@types/react": "^18.2.61",
     "@typescript-eslint/eslint-plugin": "^8.21.0",
     "@typescript-eslint/parser": "^8.21.0",
+    "concurrently": "^9.1.2",
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
