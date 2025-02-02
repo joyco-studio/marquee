@@ -157,9 +157,6 @@ class Marquee {
       this.root.removeChild(this.clonedChild)
     }
     this.clonedChild = undefined
-
-    // React will handle the cleanup of the original child and the root element
-    // this.root.innerHTML = ''
   }
 }
 
