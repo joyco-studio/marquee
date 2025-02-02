@@ -12,6 +12,9 @@ import { pxPerSecond, warn } from './helpers'
   I like this API: https://www.npmjs.com/package/react-fast-marquee
 */
 
+const INITIALIZATION_WARNING = 'Marquee not initialized!'
+const NO_PROGRESS_WARNING = 'There is no detected progress!'
+
 class Marquee {
   private root: HTMLElement
   private speed: number
@@ -90,26 +93,55 @@ class Marquee {
     }
   }
 
+  /* esto va a correr setSpeedFactor multiplicado por -1 */
   setDirection(direction: 1 | -1) {
     if (direction === this.direction) return
-    this.direction = direction
-    this.start(direction)
+
+    this.setSpeedFactor(this.speedFactor * direction)
   }
 
-  setSpeed(newspeed: number) {
-    if (!this.animation || !this.childWidth || !this.animation.effect) return
+  setSpeed(newSpeed: number) {
+    if (!this.animation || !this.childWidth || !this.animation.effect) {
+      warn(INITIALIZATION_WARNING)
+      return
+    }
 
     const timing = this.animation.effect.getComputedTiming()
 
-    this.speed = newspeed
+    this.speed = newSpeed
 
     this.start(this.direction, timing.progress ?? undefined)
   }
 
-  setSpeedFactor(v: number) {
-    if (!this.animation) return
-    this.speedFactor = v
-    this.animation.playbackRate = v
+  setSpeedFactor(newSpeedFactor: number) {
+    if (!this.animation || !this.animation.effect) {
+      warn(INITIALIZATION_WARNING)
+      return
+    }
+
+    const sign = Math.sign(newSpeedFactor)
+    const hasChangedSign = sign !== Math.sign(this.speedFactor * this.direction)
+
+    if (!hasChangedSign) {
+      this.direction = sign === 1 ? 1 : -1
+      this.speedFactor = Math.abs(newSpeedFactor)
+      this.animation.playbackRate = this.speedFactor
+      return
+    }
+
+    const timing = this.animation.effect.getComputedTiming()
+
+    if (!timing.progress) {
+      warn(NO_PROGRESS_WARNING)
+      return
+    }
+
+    const nextProgress = hasChangedSign ? 1 - timing.progress : timing.progress
+
+    this.direction = sign === 1 ? 1 : -1
+    this.speedFactor = Math.abs(newSpeedFactor)
+
+    this.start(this.direction, nextProgress)
   }
 
   pause() {
