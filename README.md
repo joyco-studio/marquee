@@ -6,6 +6,8 @@ Just a marquee.
 pnpm add @joycostudio/marquee
 ```
 
+<br/>
+
 ## 🤖 Automatic Workflows
 
 This template comes with two GitHub Actions workflows (currently disabled for convenience):
