@@ -2,6 +2,10 @@
 
 Just a marquee.
 
+```bash
+pnpm add @joycostudio/marquee
+```
+
 | Features               | Description                                                                          |
 | ---------------------- | ------------------------------------------------------------------------------------ |
 | 🚀 Quick Setup         | Initialize your library with a single command using `pnpm setup:template` |
