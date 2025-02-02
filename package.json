@@ -1,0 +1,48 @@
+{
+  "name": "@joycostudio/generic",
+  "publishConfig": {
+    "registry": "https://registry.npmjs.org",
+    "access": "public"
+  },
+  "version": "0.1.1",
+  "description": "The generic template library starter from joyco.studio",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "setup:template": "node setup.mjs",
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "version:package": "pnpm changeset version",
+    "release": "pnpm build && pnpm changeset publish",
+    "lint": "eslint -c ./eslint.config.mjs . --fix --no-cache"
+  },
+  "author": "joyco.studio",
+  "license": "ISC",
+  "devDependencies": {
+    "@changesets/cli": "^2.27.11",
+    "@eslint/js": "^9.18.0",
+    "@types/node": "^20.11.24",
+    "@types/react": "^18.2.61",
+    "@typescript-eslint/eslint-plugin": "^8.21.0",
+    "@typescript-eslint/parser": "^8.21.0",
+    "eslint": "^9.18.0",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.3",
+    "eslint-plugin-react": "^7.37.4",
+    "eslint-plugin-react-compiler": "19.0.0-beta-decd7b8-20250118",
+    "globals": "^15.14.0",
+    "prettier": "^3.4.2",
+    "react": "^18.2.0",
+    "tsup": "^8.0.2",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.21.0"
+  },
+  "peerDependencies": {
+    "react": ">=16.8.0"
+  }
+}

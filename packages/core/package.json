@@ -1,0 +1,6 @@
+{
+  "name": "core",
+  "type": "module",
+  "main": "./index.ts",
+  "types": "./index.ts"
+}
