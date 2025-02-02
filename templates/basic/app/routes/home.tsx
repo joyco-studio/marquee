@@ -1,25 +1,34 @@
-import { useEffect, useRef, useState } from 'react'
-import { Marquee } from '@joycostudio/marquee'
+import { useEffect, useRef } from 'react'
+import { Marquee as ReactMarquee, useMarquee } from '@joycostudio/marquee/react'
 
 export function meta() {
   return [{ title: 'New React Router App' }, { name: 'description', content: 'Welcome to React Router!' }]
 }
 
-const DEFAULT_VELOCITY = 300
+const DEFAULT_SPEED = 300
+
+const MarqueeContent = () => {
+  return (
+    <div className="flex">
+      {Array.from({ length: 10 }).map((_, index) => (
+        <span className="font-semibold uppercase whitespace-nowrap text-7xl" key={index}>
+          @joycostudio/marquee | JOYCO |&nbsp;
+        </span>
+      ))}
+    </div>
+  )
+}
 
 export default function Home() {
   const rootRef = useRef<HTMLDivElement>(null)
   const sliderInputRef = useRef<HTMLInputElement>(null)
   const velocityInputRef = useRef<HTMLInputElement>(null)
-  const [marquee, setMarquee] = useState<Marquee | null>(null)
+  const [marqueeRootRef, marquee] = useMarquee({ speed: DEFAULT_SPEED, speedFactor: 1, direction: 1 })
 
   useEffect(() => {
     if (!rootRef.current) return
     if (!rootRef.current.firstChild) return
-
-    const marquee = new Marquee(rootRef.current, { speed: DEFAULT_VELOCITY, direction: 1 })
-
-    setMarquee(marquee)
+    if (!marquee) return
 
     const onWheel = (e: WheelEvent) => {
       if (e.deltaY > 0) {
@@ -72,20 +81,19 @@ export default function Home() {
   }
 
   return (
-    <div className="py-[10vh] overflow-hidden">
-      <div className="flex min-w-max" ref={rootRef}>
-        <div className="flex bg-gradient-to-r from-red-transparent to-red-500">
-          {Array.from({ length: 20 }).map((_, index) => (
-            <span className="px-10 font-semibold" key={index}>
-              CHILD
-            </span>
-          ))}
-        </div>
+    <div>
+      <ReactMarquee rootClassName="my-[10vh]" speed={DEFAULT_SPEED} speedFactor={1} direction={1}>
+        <MarqueeContent />
+      </ReactMarquee>
+
+      <div className="my-[10vh] flex min-w-max" ref={marqueeRootRef}>
+        <MarqueeContent />
       </div>
+
       <div className="flex gap-x-4 items-center justify-center mt-20">
         <input
           type="number"
-          defaultValue={DEFAULT_VELOCITY}
+          defaultValue={DEFAULT_SPEED}
           min="1"
           className="w-20 border border-zinc-500 bg-zinc-900"
           ref={velocityInputRef}

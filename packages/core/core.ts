@@ -15,6 +15,12 @@ import { pxPerSecond, warn } from './helpers'
 const INITIALIZATION_WARNING = 'Marquee not initialized!'
 const NO_PROGRESS_WARNING = 'There is no detected progress!'
 
+type MarqueeOptions = {
+  speed?: number
+  speedFactor?: number
+  direction?: 1 | -1
+}
+
 class Marquee {
   private root: HTMLElement
   private speed: number
@@ -31,9 +37,10 @@ class Marquee {
    * @param {Object} options - The options for the marquee.
    * @param {number} [options.speed=1] - The speed of the marquee in pixels per second.
    */
-  constructor(root: HTMLElement, { speed = 10 / 1, direction = 1 }: { speed?: number; direction?: 1 | -1 } = {}) {
+  constructor(root: HTMLElement, { speed = 10 / 1, speedFactor = 1, direction = 1 }: MarqueeOptions = {}) {
     this.root = root
     this.speed = speed
+    this.speedFactor = speedFactor
     this.direction = direction
   }
 
@@ -93,7 +100,6 @@ class Marquee {
     }
   }
 
-  /* esto va a correr setSpeedFactor multiplicado por -1 */
   setDirection(direction: 1 | -1) {
     if (direction === this.direction) return
 
@@ -105,6 +111,8 @@ class Marquee {
       warn(INITIALIZATION_WARNING)
       return
     }
+
+    if (this.speed === newSpeed) return
 
     const timing = this.animation.effect.getComputedTiming()
 
@@ -118,6 +126,8 @@ class Marquee {
       warn(INITIALIZATION_WARNING)
       return
     }
+
+    if (this.speedFactor === newSpeedFactor) return
 
     const sign = Math.sign(newSpeedFactor)
     const hasChangedSign = sign !== Math.sign(this.speedFactor * this.direction)

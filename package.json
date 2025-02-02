@@ -6,9 +6,19 @@
   },
   "version": "0.0.0",
   "description": "Just a marquee",
-  "main": "dist/index.js",
-  "module": "dist/index.mjs",
-  "types": "dist/index.d.ts",
+  "main": "dist/core.js",
+  "module": "dist/core.mjs",
+  "types": "dist/core.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/core.d.ts",
+      "default": "./dist/core.mjs"
+    },
+    "./react": {
+      "types": "./dist/react.d.ts",
+      "default": "./dist/react.mjs"
+    }
+  },
   "files": [
     "dist"
   ],
