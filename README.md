@@ -6,53 +6,6 @@ Just a marquee.
 pnpm add @joycostudio/marquee
 ```
 
-| Features               | Description                                                                          |
-| ---------------------- | ------------------------------------------------------------------------------------ |
-| 🚀 Quick Setup         | Initialize your library with a single command using `pnpm setup:template` |
-| 📦 Modern Build System | Built with **tsup** for fast, modern builds supporting ESM and CJS |
-| 🔄 Automatic Releases  | Optional automated publishing and version management with [changesets](https://github.com/changesets/changesets) |
-| 🔍 PR Preview          | Optional package preview builds for every PR and commit with [pkg.pr.new](https://github.com/stackblitz-labs/pkg.pr.new) |
-| 🎯 TypeScript Ready    | Full TypeScript support with strict type checking |
-| 🧹 Code Quality        | ESLint and Prettier pre-configured for code quality |
-| ⚛️ React Support       | React support with proper peer dependencies **React 19** + **React Compiler** ready |
-| 🔒 Type Safety         | Strict TypeScript configuration for better type safety |
-
-<br/>
-
-## ❗️ MUST DO ON TEMPLATE FORK ❗️
-
-This template has sample data by default. So run the setup script as soon as you fork & clone.
-
-```bash
-pnpm setup:template
-```
-
-This will fill package information and install deps for you. Remember to commit.
-
-> If you enable PR & commit package preview you need to install [PKG.PR.NEW](https://github.com/apps/pkg-pr-new) on the target repository.
-
-### `package.json` defaults
-
-- `author: joyco.studio`
-- `publishConfig.access: private`
-- `version: 0.0.0`
-- `license: ISC`
-
-<br/>
-
-## 👀 Good to know
-
-If you **DON't** need react as a peer dependency you **NEED** to delete it.
-
-```bash
-# 1. Remove both the devDependencies and peerDependencies
-pnpm remove @types/react react
-```
-
-Then **manually** remove the peerDependencies section from `package.json` and also check `eslint.config.js`, `tsconfig.json`.
-
-<br/>
-
 ## 🤖 Automatic Workflows
 
 This template comes with two GitHub Actions workflows (currently disabled for convenience):
