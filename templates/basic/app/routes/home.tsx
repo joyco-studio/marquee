@@ -88,26 +88,25 @@ const MarqueeContent = () => {
 }
 
 const ScrollBoundMarquee = ({ inverted }: { inverted?: boolean }) => {
-  const [marqueeRootRef, marquee] = useMarquee({ speed: DEFAULT_SPEED, speedFactor: 1, direction: 1 })
+  const marquee = useMarquee({ speed: DEFAULT_SPEED, speedFactor: 1, direction: 1 })
+  const [, marqueeAPI] = marquee
   const velocity = useScrollVelocity()
 
   useEffect(() => {
-    if (!marquee) return
+    if (!marqueeAPI) return
     const v = velocity * (inverted ? -1 : 1)
     const sign = Math.sign(v)
 
     if (sign === 0) return
 
     const cappedV = Math[sign === -1 ? 'min' : 'max'](v, sign * 1)
-    marquee.setSpeedFactor(cappedV)
+    marqueeAPI.setSpeedFactor(cappedV)
   }, [velocity])
 
   return (
-    <div className="w-full overflow-hidden max-w-full">
-      <div className="flex min-w-max" ref={marqueeRootRef}>
-        <MarqueeContent />
-      </div>
-    </div>
+    <Marquee instance={marquee}>
+      <MarqueeContent />
+    </Marquee>
   )
 }
 

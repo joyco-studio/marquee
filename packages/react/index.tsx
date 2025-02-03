@@ -41,13 +41,24 @@ const useMarquee = <T extends HTMLDivElement>({ speed, speedFactor, direction, p
   return [rootRef, marquee] as const
 }
 
-export type MarqueeProps = {
+export type ReactMarqueeConfigProps = {
   children: React.ReactNode
   rootClassName?: string
   marqueeClassName?: string
 } & MarqueeOptions
 
-const ReactMarquee = ({
+const marqueeRootStyles = {
+  overflowX: 'clip',
+  overflowY: 'visible',
+  maxWidth: '100%',
+} satisfies React.CSSProperties
+
+const marqueeInstanceStyles = {
+  minWidth: 'max-content',
+  display: 'flex',
+} satisfies React.CSSProperties
+
+const ReactMarqueeConfig = ({
   children,
   speed,
   speedFactor,
@@ -55,7 +66,7 @@ const ReactMarquee = ({
   play = true,
   rootClassName,
   marqueeClassName,
-}: MarqueeProps) => {
+}: ReactMarqueeConfigProps) => {
   const [rootRef, marquee] = useMarquee({ speed, speedFactor, direction, play })
 
   useEffect(() => {
@@ -66,12 +77,38 @@ const ReactMarquee = ({
   }, [speed, speedFactor, direction])
 
   return (
-    <div style={{ overflowX: 'clip', overflowY: 'visible', maxWidth: '100%' }} className={rootClassName}>
-      <div style={{ minWidth: 'max-content', display: 'flex' }} className={marqueeClassName} ref={rootRef}>
+    <div style={marqueeRootStyles} className={rootClassName}>
+      <div style={marqueeInstanceStyles} className={marqueeClassName} ref={rootRef}>
         {children}
       </div>
     </div>
   )
+}
+
+type ReactMarqueeInstanceProps = {
+  children: React.ReactNode
+  rootClassName?: string
+  marqueeClassName?: string
+  instance: ReturnType<typeof useMarquee>
+}
+
+const ReactMarqueeInstance = ({ children, rootClassName, marqueeClassName, instance }: ReactMarqueeInstanceProps) => {
+  return (
+    <div style={marqueeRootStyles} className={rootClassName}>
+      <div style={{ minWidth: 'max-content', display: 'flex' }} className={marqueeClassName} ref={instance[0]}>
+        {children}
+      </div>
+    </div>
+  )
+}
+
+type ReactMarqueeProps = ReactMarqueeInstanceProps | ReactMarqueeConfigProps
+
+const ReactMarquee = (props: ReactMarqueeProps) => {
+  if ('instance' in props) {
+    return <ReactMarqueeInstance {...props} />
+  }
+  return <ReactMarqueeConfig {...props} />
 }
 
 export { ReactMarquee as Marquee, useMarquee }
