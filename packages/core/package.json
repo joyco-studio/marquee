@@ -1,5 +1,9 @@
 {
   "name": "@marquee/core",
   "type": "module",
-  "main": "./index.ts"
+  "main": "./index.ts",
+  "private": true,
+  "changeset": {
+    "ignore": true
+  }
 }

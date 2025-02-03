@@ -4,5 +4,9 @@
   "main": "./index.tsx",
   "peerDependencies": {
     "react": ">=16.8.0"
+  },
+  "private": true,
+  "changeset": {
+    "ignore": true
   }
 }
