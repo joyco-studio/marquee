@@ -9,9 +9,12 @@
     "typecheck": "react-router typegen && tsc"
   },
   "dependencies": {
+    "@joycostudio/marquee": "workspace:^",
+    "@radix-ui/react-slider": "^1.2.2",
+    "@radix-ui/react-slot": "^1.1.1",
     "@react-router/node": "^7.1.5",
     "@react-router/serve": "^7.1.5",
-    "@joycostudio/marquee": "workspace:^",
+    "class-variance-authority": "^0.7.1",
     "isbot": "^5.1.17",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

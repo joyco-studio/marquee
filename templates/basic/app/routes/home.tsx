@@ -1,5 +1,9 @@
 import { useEffect, useRef, useState } from 'react'
 import { useMarquee } from '@joycostudio/marquee/react'
+import { Input } from './components/input'
+import { Button } from './components/button'
+import { Slider } from './components/slider'
+import { rangeRemap } from '@/lib/utils'
 
 export function meta() {
   return [{ title: 'New React Router App' }, { name: 'description', content: 'Welcome to React Router!' }]
@@ -84,8 +88,8 @@ const MarqueeContent = () => {
 }
 
 const ScrollBoundMarquee = ({ inverted }: { inverted?: boolean }) => {
-  const velocity = useScrollVelocity()
   const [marqueeRootRef, marquee] = useMarquee({ speed: DEFAULT_SPEED, speedFactor: 1, direction: 1 })
+  const velocity = useScrollVelocity()
 
   useEffect(() => {
     if (!marquee) return
@@ -99,56 +103,26 @@ const ScrollBoundMarquee = ({ inverted }: { inverted?: boolean }) => {
   }, [velocity])
 
   return (
-    <div className="flex min-w-max" ref={marqueeRootRef}>
-      <MarqueeContent />
+    <div className="w-full overflow-hidden max-w-full">
+      <div className="flex min-w-max" ref={marqueeRootRef}>
+        <MarqueeContent />
+      </div>
     </div>
   )
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const ConfigMarquee = () => {
-  const sliderInputRef = useRef<HTMLInputElement>(null)
-  const velocityInputRef = useRef<HTMLInputElement>(null)
-  const [marqueeRootRef, marquee] = useMarquee({ speed: DEFAULT_SPEED, speedFactor: 1, direction: 1 })
+  const [pxPerSecond, setPxPerSecond] = useState(DEFAULT_SPEED)
+  const [speedFactor, setSpeedFactor] = useState(100)
+  const [direction, setDirection] = useState<1 | -1>(1)
+  const [marqueeRootRef, marquee] = useMarquee({ speed: pxPerSecond, speedFactor: 1, direction: 1 })
 
   useEffect(() => {
     if (!marquee) return
-
-    const onWheel = (e: WheelEvent) => {
-      if (e.deltaY > 0) {
-        marquee.setDirection(1)
-        console.log('forward')
-      } else {
-        marquee.setDirection(-1)
-        console.log('backward')
-      }
-    }
-
-    const onInput = () => {
-      if (!sliderInputRef.current) return
-      const v = -1 + Number(sliderInputRef.current.value) / 50
-      marquee.setSpeedFactor(v)
-      console.log(v)
-    }
-
-    const onVelocityChange = () => {
-      if (!velocityInputRef.current) return
-      const v = Number(velocityInputRef.current.value)
-      marquee.setSpeed(v)
-      console.log(v)
-    }
-
-    window.addEventListener('wheel', onWheel, { passive: true })
-    sliderInputRef.current?.addEventListener('input', onInput)
-    velocityInputRef.current?.addEventListener('input', onVelocityChange)
-
-    return () => {
-      window.removeEventListener('wheel', onWheel)
-      sliderInputRef.current?.removeEventListener('input', onInput)
-      velocityInputRef.current?.removeEventListener('input', onVelocityChange)
-      marquee.destroy()
-    }
-  }, [])
+    marquee.setSpeed(pxPerSecond)
+    marquee.setSpeedFactor(rangeRemap(speedFactor, 0, 100, 0, 1))
+    marquee.setDirection(direction)
+  }, [pxPerSecond, speedFactor, direction])
 
   const handlePlayStop = () => {
     if (!marquee) return
@@ -159,23 +133,58 @@ const ConfigMarquee = () => {
     }
   }
 
+  const toggleDirection = () => {
+    setDirection((prev) => (prev === 1 ? -1 : 1))
+  }
+
   return (
-    <div>
-      <div className="flex min-w-max" ref={marqueeRootRef}>
-        <MarqueeContent />
+    <div className="w-full">
+      <div
+        style={{
+          maskImage: 'linear-gradient(to right, transparent, black 20%, black 80%, transparent)',
+        }}
+        className="w-full overflow-hidden max-w-full"
+      >
+        <div className="flex min-w-max" ref={marqueeRootRef}>
+          <MarqueeContent />
+        </div>
       </div>
-      <div className="flex gap-x-4 items-center justify-center mt-20">
-        <input
-          type="number"
-          defaultValue={DEFAULT_SPEED}
-          min="1"
-          className="w-20 border border-zinc-500 bg-zinc-900"
-          ref={velocityInputRef}
-        />
 
-        <input type="range" defaultValue={1} min="1" max="100" className="thumb-slider-input" ref={sliderInputRef} />
+      <div className="flex mx-auto max-w-[300px] flex-col gap-y-12 gap-x-4 items-center justify-center mt-24">
+        <div className="w-full space-y-2">
+          <p className="text-muted-foreground font-semibold">Speed (px/s)</p>
+          <Input
+            placeholder="Speed"
+            className="w-32"
+            defaultValue={DEFAULT_SPEED}
+            onBlur={(e) => setPxPerSecond(Number(e.target.value))}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault()
+                e.currentTarget.blur()
+              }
+            }}
+          />
+        </div>
 
-        <button onClick={handlePlayStop}>Play/Pause</button>
+        <div className="w-full space-y-2">
+          <p className="text-muted-foreground font-semibold">Speed Factor</p>
+          <Slider onValueCommit={([v]) => setSpeedFactor(v)} defaultValue={[speedFactor]} max={100} step={1} />
+        </div>
+
+        <div className="w-full space-y-2">
+          <p className="text-muted-foreground font-semibold">Direction</p>
+          <Button className="w-full" onClick={toggleDirection}>
+            {direction === 1 ? 'Forward' : 'Backward'}
+          </Button>
+        </div>
+
+        <div className="w-full space-y-2">
+          <p className="text-muted-foreground font-semibold">Playstate</p>
+          <Button className="w-full" onClick={handlePlayStop}>
+            Play/Pause
+          </Button>
+        </div>
       </div>
     </div>
   )
@@ -183,16 +192,28 @@ const ConfigMarquee = () => {
 
 export default function Home() {
   return (
-    <div className="h-[400vh] bg-gradient-to-b from-zinc-900 to-zinc-800">
-      <div className="h-screen fixed inset-0 flex flex-col justify-between">
-        <ScrollBoundMarquee inverted />
-        <ScrollBoundMarquee />
-        <ScrollBoundMarquee inverted />
-        <ScrollBoundMarquee />
-        <ScrollBoundMarquee inverted />
-        <ScrollBoundMarquee />
-        <ScrollBoundMarquee inverted />
-        <ScrollBoundMarquee />
+    <div className="h-[400vh] bg-gradient-to-b from-background to-[#000000]">
+      <div className="h-screen flex items-center justify-center">
+        <ConfigMarquee />
+      </div>
+      <div className="h-[400vh]">
+        <div className="h-screen py-12 sticky min-h-max items-center left-0 top-0 w-full gap-y-10 flex flex-col justify-between">
+          <ScrollBoundMarquee inverted />
+          <ScrollBoundMarquee />
+          <ScrollBoundMarquee inverted />
+          <ScrollBoundMarquee />
+          <ScrollBoundMarquee inverted />
+          <ScrollBoundMarquee />
+          <ScrollBoundMarquee inverted />
+          <ScrollBoundMarquee />
+        </div>
+      </div>
+      <div className="h-screen flex items-center w-full justify-center">
+        <div className="max-w-max mx-auto">
+          <div className="px-4 py-4 bg-foreground/10 rounded-xl">
+            <pre>pnpm add @joycostudio/marquee</pre>
+          </div>
+        </div>
       </div>
     </div>
   )

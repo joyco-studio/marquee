@@ -27,6 +27,10 @@ const useMarquee = <T extends HTMLDivElement>({ speed, speedFactor, direction }:
     marquee.initialize(children[0] as HTMLElement)
   }, [])
 
+  useEffect(() => {
+    return () => marquee?.destroy()
+  }, [])
+
   return [rootRef, marquee] as const
 }
 
