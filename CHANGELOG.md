@@ -1,5 +1,11 @@
 # @joycostudio/marquee
 
+## 0.0.6
+
+### Patch Changes
+
+- 2163405: disable minify
+
 ## 0.0.5
 
 ### Patch Changes
