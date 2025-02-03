@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { useMarquee } from '@joycostudio/marquee/react'
+import { Marquee, useMarquee } from '@joycostudio/marquee/react'
 import { Input } from './components/input'
 import { Button } from './components/button'
 import { Slider } from './components/slider'
@@ -134,24 +134,7 @@ const ConfigMarquee = () => {
   const [pxPerSecond, setPxPerSecond] = useState(DEFAULT_SPEED)
   const [speedFactor, setSpeedFactor] = useState(100)
   const [direction, setDirection] = useState<1 | -1>(1)
-  const [marqueeRootRef, marquee] = useMarquee({ speed: pxPerSecond, speedFactor: 1, direction: 1 })
-
-  useEffect(() => {
-    if (!marquee) return
-    marquee.setSpeed(pxPerSecond)
-    marquee.setSpeedFactor(rangeRemap(speedFactor, 0, 100, 0, 1))
-    marquee.setDirection(direction)
-  }, [pxPerSecond, speedFactor, direction])
-
-  const handlePlayStop = () => {
-    if (!marquee) return
-    if (marquee.playing) {
-      marquee.pause()
-    } else {
-      marquee.play()
-    }
-  }
-
+  const [play, setPlay] = useState(true)
   const toggleDirection = () => {
     setDirection((prev) => (prev === 1 ? -1 : 1))
   }
@@ -164,9 +147,14 @@ const ConfigMarquee = () => {
         }}
         className="w-full overflow-hidden max-w-full"
       >
-        <div className="flex min-w-max" ref={marqueeRootRef}>
+        <Marquee
+          speed={pxPerSecond}
+          speedFactor={rangeRemap(speedFactor, 0, 100, 0, 1)}
+          direction={direction}
+          play={play}
+        >
           <MarqueeContent />
-        </div>
+        </Marquee>
       </div>
 
       <div className="flex mx-auto max-w-[300px] flex-col gap-y-12 gap-x-4 items-center justify-center mt-24">
@@ -200,8 +188,8 @@ const ConfigMarquee = () => {
 
         <div className="w-full space-y-2">
           <p className="text-muted-foreground font-semibold">Playstate</p>
-          <Button className="w-full" onClick={handlePlayStop}>
-            Play/Pause
+          <Button className="w-full" onClick={() => setPlay((prev) => !prev)}>
+            {play ? 'Pause' : 'Play'}
           </Button>
         </div>
       </div>

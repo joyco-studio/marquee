@@ -6,9 +6,10 @@ type MarqueeOptions = {
   speed: number
   speedFactor: number
   direction: 1 | -1
+  play?: boolean
 }
 
-const useMarquee = <T extends HTMLDivElement>({ speed, speedFactor, direction }: MarqueeOptions) => {
+const useMarquee = <T extends HTMLDivElement>({ speed, speedFactor, direction, play = true }: MarqueeOptions) => {
   const rootRef = useRef<T>(null)
   const [marquee, setMarquee] = useState<Marquee | null>(null)
 
@@ -28,6 +29,12 @@ const useMarquee = <T extends HTMLDivElement>({ speed, speedFactor, direction }:
   }, [])
 
   useEffect(() => {
+    if (!marquee) return
+    if (play) marquee.play()
+    else marquee.pause()
+  }, [play])
+
+  useEffect(() => {
     return () => marquee?.destroy()
   }, [])
 
@@ -40,8 +47,16 @@ export type MarqueeProps = {
   marqueeClassName?: string
 } & MarqueeOptions
 
-const ReactMarquee = ({ children, speed, speedFactor, direction, rootClassName, marqueeClassName }: MarqueeProps) => {
-  const [rootRef, marquee] = useMarquee({ speed, speedFactor, direction })
+const ReactMarquee = ({
+  children,
+  speed,
+  speedFactor,
+  direction,
+  play = true,
+  rootClassName,
+  marqueeClassName,
+}: MarqueeProps) => {
+  const [rootRef, marquee] = useMarquee({ speed, speedFactor, direction, play })
 
   useEffect(() => {
     if (!marquee) return
