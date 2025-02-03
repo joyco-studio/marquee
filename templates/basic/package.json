@@ -1,5 +1,5 @@
 {
-  "name": "basic",
+  "name": "@templates/basic",
   "private": true,
   "type": "module",
   "scripts": {

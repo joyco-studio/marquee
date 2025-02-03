@@ -1,6 +1,8 @@
 {
-  "name": "react",
+  "name": "@marquee/react",
   "type": "module",
-  "main": "./index.ts",
-  "types": "./index.ts"
+  "main": "./index.tsx",
+  "peerDependencies": {
+    "react": ">=16.8.0"
+  }
 }
