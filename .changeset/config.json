@@ -8,7 +8,7 @@
   "baseBranch": "main",
   "updateInternalDependencies": "patch",
   "ignore": [
-    "core",
-    "react"
+    "@joycostudio/marquee/core",
+    "@joycostudio/marquee/react"
   ]
 }
