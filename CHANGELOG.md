@@ -1,5 +1,11 @@
 # @joycostudio/marquee
 
+## 0.0.4
+
+### Patch Changes
+
+- 9d59a34: Test release workflow
+
 ## 0.0.3
 
 ### Patch Changes
