@@ -111,6 +111,25 @@ const ScrollBoundMarquee = ({ inverted }: { inverted?: boolean }) => {
   )
 }
 
+const Header = () => {
+  return (
+    <div className="w-full flex justify-center items-center h-20">
+      <svg className="h-8" viewBox="0 0 378 271" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g>
+          <path
+            d="M143.917 89.923C168.749 89.923 188.879 69.7931 188.879 44.9615C188.879 20.1299 168.749 0 143.917 0C119.086 0 98.9556 20.1299 98.9556 44.9615C98.9556 69.7931 119.086 89.923 143.917 89.923Z"
+            fill="#FAFAFA"
+          />
+          <path
+            d="M341.138 89.9326C324.481 89.9326 309.922 101.168 305.775 117.279C292.058 170.488 241.177 199.444 188.84 198.735C136.513 199.444 85.6222 170.488 71.9058 117.279C67.7583 101.168 53.1894 89.9326 36.5419 89.9326C13.4865 89.9326 -3.774 111.015 0.699161 133.63C18.7738 224.97 103.802 270.631 188.831 270.669C273.859 270.641 358.887 224.97 376.962 133.63C381.435 111.015 364.175 89.9326 341.119 89.9326H341.138Z"
+            fill="#FAFAFA"
+          />
+        </g>
+      </svg>
+    </div>
+  )
+}
+
 const ConfigMarquee = () => {
   const [pxPerSecond, setPxPerSecond] = useState(DEFAULT_SPEED)
   const [speedFactor, setSpeedFactor] = useState(100)
@@ -169,7 +188,7 @@ const ConfigMarquee = () => {
 
         <div className="w-full space-y-2">
           <p className="text-muted-foreground font-semibold">Speed Factor</p>
-          <Slider onValueCommit={([v]) => setSpeedFactor(v)} defaultValue={[speedFactor]} max={100} step={1} />
+          <Slider onValueChange={([v]) => setSpeedFactor(v)} defaultValue={[speedFactor]} max={100} step={1} />
         </div>
 
         <div className="w-full space-y-2">
@@ -193,6 +212,7 @@ const ConfigMarquee = () => {
 export default function Home() {
   return (
     <div className="h-[400vh] bg-gradient-to-b from-background to-[#000000]">
+      <Header />
       <div className="h-screen flex items-center justify-center">
         <ConfigMarquee />
       </div>
