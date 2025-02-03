@@ -1,5 +1,11 @@
 # @joycostudio/marquee
 
+## 0.0.5
+
+### Patch Changes
+
+- d8ec304: Update readme
+
 ## 0.0.4
 
 ### Patch Changes
