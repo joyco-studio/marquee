@@ -145,7 +145,7 @@ const ConfigMarquee = () => {
         style={{
           maskImage: 'linear-gradient(to right, transparent, black 20%, black 80%, transparent)',
         }}
-        className="w-full overflow-hidden max-w-full"
+        className="w-full max-w-full"
       >
         <Marquee
           speed={pxPerSecond}

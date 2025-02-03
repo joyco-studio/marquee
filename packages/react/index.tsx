@@ -66,7 +66,7 @@ const ReactMarquee = ({
   }, [speed, speedFactor, direction])
 
   return (
-    <div style={{ overflowX: 'hidden' }} className={rootClassName}>
+    <div style={{ overflowX: 'clip', overflowY: 'visible', maxWidth: '100%' }} className={rootClassName}>
       <div style={{ minWidth: 'max-content', display: 'flex' }} className={marqueeClassName} ref={rootRef}>
         {children}
       </div>
