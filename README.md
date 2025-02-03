@@ -1,5 +1,5 @@
-# <img src="./static/JOYCO.png" alt="JOYCO Logo" height="36" width="36" align="top" />&nbsp;&nbsp;JOYCO Marquee
-<img src="./static/banner.png" alt="banner" />
+# <img src="https://raw.githubusercontent.com/joyco-studio/marquee/main/static/JOYCO.png" alt="JOYCO Logo" height="36" width="36" align="top" />&nbsp;&nbsp;JOYCO Marquee
+<img src="https://raw.githubusercontent.com/joyco-studio/marquee/main/static/banner.png" alt="banner" />
 
 ```bash
 pnpm add @joycostudio/marquee
