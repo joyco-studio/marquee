@@ -1,9 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import { Marquee, useMarquee } from '@joycostudio/marquee/react'
 import { Input } from './components/input'
 import { Button } from './components/button'
 import { Slider } from './components/slider'
-import { rangeRemap } from '@/lib/utils'
+import { cn, rangeRemap } from '@/lib/utils'
+import { useLenis } from '@/lib/scroll'
 
 export function meta() {
   return [{ title: 'New React Router App' }, { name: 'description', content: 'Welcome to React Router!' }]
@@ -11,75 +12,11 @@ export function meta() {
 
 const DEFAULT_SPEED = 300
 
-const useScrollVelocity = () => {
-  const [velocity, setVelocity] = useState(0)
-  const lastScrollRef = useRef(0)
-  const lastTimeRef = useRef(Date.now())
-  const lastScrollEventRef = useRef(Date.now())
-  const rafRef = useRef<number>(null)
-
-  useEffect(() => {
-    const onScroll = () => {
-      const currentTime = Date.now()
-      const timeDelta = currentTime - lastTimeRef.current
-      const currentScroll = window.scrollY
-      const scrollDelta = currentScroll - lastScrollRef.current
-
-      // Calculate velocity (pixels per millisecond)
-      const instantVelocity = scrollDelta / Math.max(1, timeDelta)
-
-      // Smooth out the velocity using exponential moving average
-      setVelocity((prevVelocity) => {
-        const smoothingFactor = 0.1 // Adjust this value between 0 and 1 for different smoothing levels
-        return prevVelocity * (1 - smoothingFactor) + instantVelocity * smoothingFactor
-      })
-
-      lastScrollRef.current = currentScroll
-      lastTimeRef.current = currentTime
-      lastScrollEventRef.current = currentTime
-    }
-
-    const decayVelocity = () => {
-      const currentTime = Date.now()
-      const timeSinceLastScroll = currentTime - lastScrollEventRef.current
-
-      // Only start decay after 50ms of no scroll events
-      if (timeSinceLastScroll > 50) {
-        setVelocity((prevVelocity) => {
-          // Apply exponential decay
-          const decayFactor = 0.95
-          const newVelocity = prevVelocity * decayFactor
-
-          // Stop RAF when velocity is negligible
-          if (Math.abs(newVelocity) < 0.0001) {
-            return 0
-          }
-          return newVelocity
-        })
-      }
-
-      rafRef.current = requestAnimationFrame(decayVelocity)
-    }
-
-    window.addEventListener('scroll', onScroll)
-    rafRef.current = requestAnimationFrame(decayVelocity)
-
-    return () => {
-      window.removeEventListener('scroll', onScroll)
-      if (rafRef.current) {
-        cancelAnimationFrame(rafRef.current)
-      }
-    }
-  }, [])
-
-  return velocity
-}
-
-const MarqueeContent = () => {
+const MarqueeContent = ({ className }: { className?: string }) => {
   return (
-    <div className="flex">
+    <div className={cn('flex')}>
       {Array.from({ length: 10 }).map((_, index) => (
-        <span className="font-semibold uppercase whitespace-nowrap text-7xl" key={index}>
+        <span className={cn('font-semibold uppercase whitespace-nowrap text-7xl', className)} key={index}>
           @joycostudio/marquee | JOYCO |&nbsp;
         </span>
       ))}
@@ -89,23 +26,20 @@ const MarqueeContent = () => {
 
 const ScrollBoundMarquee = ({ inverted }: { inverted?: boolean }) => {
   const marquee = useMarquee({ speed: DEFAULT_SPEED, speedFactor: 1, direction: 1 })
+  const lastSign = useRef<number>(1)
   const [, marqueeAPI] = marquee
-  const velocity = useScrollVelocity()
 
-  useEffect(() => {
+  useLenis(({ velocity }) => {
     if (!marqueeAPI) return
-    const v = velocity * (inverted ? -1 : 1)
-    const sign = Math.sign(v)
-
+    const sign = Math.sign(velocity)
     if (sign === 0) return
-
-    const cappedV = Math[sign === -1 ? 'min' : 'max'](v, sign * 1)
-    marqueeAPI.setSpeedFactor(cappedV)
-  }, [velocity])
+    lastSign.current = sign
+    marqueeAPI.setSpeedFactor((1 * sign + velocity / 5) * (inverted ? -1 : 1))
+  })
 
   return (
     <Marquee instance={marquee}>
-      <MarqueeContent />
+      <MarqueeContent className="text-[100px]" />
     </Marquee>
   )
 }
@@ -208,11 +142,6 @@ export default function Home() {
           <ScrollBoundMarquee inverted />
           <ScrollBoundMarquee />
           <ScrollBoundMarquee inverted />
-          <ScrollBoundMarquee />
-          <ScrollBoundMarquee inverted />
-          <ScrollBoundMarquee />
-          <ScrollBoundMarquee inverted />
-          <ScrollBoundMarquee />
         </div>
       </div>
       <div className="h-screen flex items-center w-full justify-center">
