@@ -25,7 +25,7 @@ const MarqueeContent = ({ className }: { className?: string }) => {
 }
 
 const ScrollBoundMarquee = ({ inverted }: { inverted?: boolean }) => {
-  const marquee = useMarquee({ speed: DEFAULT_SPEED, speedFactor: 1, direction: 1 })
+  const marquee = useMarquee({ speed: DEFAULT_SPEED, speedFactor: 1, direction: inverted ? -1 : 1 })
   const lastSign = useRef<number>(1)
   const [, marqueeAPI] = marquee
 
@@ -139,6 +139,8 @@ export default function Home() {
       </div>
       <div className="h-[400vh]">
         <div className="h-screen py-12 sticky min-h-max items-center left-0 top-0 w-full gap-y-10 flex flex-col justify-between">
+          <ScrollBoundMarquee inverted />
+          <ScrollBoundMarquee />
           <ScrollBoundMarquee inverted />
           <ScrollBoundMarquee />
           <ScrollBoundMarquee inverted />
