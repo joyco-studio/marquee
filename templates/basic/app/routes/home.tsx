@@ -132,7 +132,7 @@ const ConfigMarquee = () => {
 
 export default function Home() {
   return (
-    <div className="h-[400vh] bg-gradient-to-b from-background to-[#000000]">
+    <div className="bg-gradient-to-b from-background to-[#000000]">
       <Header />
       <div className="h-screen flex items-center justify-center">
         <ConfigMarquee />
