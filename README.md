@@ -52,16 +52,21 @@ import { useMarquee, Marquee } from '@joycostudio/marquee'
 
 function InverstorsMarquee() {
   // Create a shared marquee instance
-  const instance = useMarquee({
+  const [ref, api] = useMarquee({
     speed: 1,
     speedFactor: 1,
     direction: 1,
     play: true,
   })
 
+  useEffect(() => {
+    /* px per second */
+    api.setSpeed(100)
+  }, [])
+
   return (
     <div>
-      <Marquee instance={instance}>
+      <Marquee instance={[ref, api]}>
         <div>First marquee content</div>
       </Marquee>
     </div>
