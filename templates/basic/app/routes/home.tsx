@@ -25,20 +25,19 @@ const MarqueeContent = ({ className }: { className?: string }) => {
 }
 
 const ScrollBoundMarquee = ({ inverted }: { inverted?: boolean }) => {
-  const marquee = useMarquee({ speed: DEFAULT_SPEED, speedFactor: 1, direction: inverted ? -1 : 1 })
+  const [ref, marquee] = useMarquee({ speed: DEFAULT_SPEED, speedFactor: 1, direction: inverted ? -1 : 1 })
   const lastSign = useRef<number>(1)
-  const [, marqueeAPI] = marquee
 
   useLenis(({ velocity }) => {
-    if (!marqueeAPI) return
+    if (!marquee) return
     const sign = Math.sign(velocity)
     if (sign === 0) return
     lastSign.current = sign
-    marqueeAPI.setSpeedFactor((1 * sign + velocity / 5) * (inverted ? -1 : 1))
+    marquee.setSpeedFactor((1 * sign + velocity / 5) * (inverted ? -1 : 1))
   })
 
   return (
-    <Marquee instance={marquee}>
+    <Marquee instance={[ref, marquee]}>
       <MarqueeContent className="text-[100px]" />
     </Marquee>
   )
