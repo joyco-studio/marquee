@@ -8,7 +8,7 @@ pnpm add @joycostudio/marquee
 
 ## 🤔 Why Marquee?
 
-JOYCO Marquee leverages the Web Animations API (WAAPI) to create smooth, performant scrolling animations. While CSS animations are great for simple use cases, we chose to build on top of the JavaScript-based Web Animations API for several key advantages:
+JOYCO Marquee leverages the Web Animations API (WAAPI) to create smooth, performant animations. While CSS animations are great for simple use cases, we chose to build on top of the JavaScript-based Web Animations API for several key advantages:
 
 - **Precise Control**: The Web Animations API provides programmatic control over animation playback, allowing features like dynamic speed adjustment and direction changes without recreating the animation.
 - **Performance**: By using the browser's native animation engine, we achieve smooth performance off the main thread.
@@ -50,7 +50,7 @@ For more control, you can use the `useMarquee` hook. This is particularly useful
 ```tsx
 import { useMarquee, Marquee } from '@joycostudio/marquee'
 
-function MarqueeContainer() {
+function InverstorsMarquee() {
   // Create a shared marquee instance
   const instance = useMarquee({
     speed: 1,
@@ -61,7 +61,6 @@ function MarqueeContainer() {
 
   return (
     <div>
-      {/* Use the same marquee configuration for multiple elements */}
       <Marquee instance={instance}>
         <div>First marquee content</div>
       </Marquee>
