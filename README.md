@@ -86,12 +86,15 @@ The `useMarquee` hook returns a tuple containing:
 - The marquee component only supports a single child element. Wrap multiple elements in a container if needed.
 - The marquee automatically handles cleanup on unmount.
 - The component provides built-in styles for proper overflow handling and content positioning.
-- You are responsible for making the marquee cover the full width of it's render area. This library **DOES NOT** auto fill that space.
+- You are responsible for making the marquee cover the full width of it's render area. This library **DOES NOT** auto-fill that space.
 
 <br/>
 
 ## Can I use it in [place the latest top-notch high-performance new tech framework here]?
+
 This page is not strictly bound to React, it has a core package and a React implementation of that core functionality. So feel free to create you own implementation in your favorite framework. And if your heart is big enough, leave a PR for the community. The rebels will thank your service 🫡.
+
+<br/>
 
 ## 🤖 Automatic Workflows
 
