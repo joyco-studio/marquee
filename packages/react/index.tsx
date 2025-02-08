@@ -104,7 +104,7 @@ const ReactMarqueeInstance = ({ children, rootClassName, marqueeClassName, insta
 
 type ReactMarqueeProps = ReactMarqueeInstanceProps | ReactMarqueeConfigProps
 
-const ReactMarquee = (props: ReactMarqueeProps) => {
+const ReactMarquee: React.FC<ReactMarqueeProps> = (props) => {
   if ('instance' in props) {
     return <ReactMarqueeInstance {...props} />
   }
