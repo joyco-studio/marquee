@@ -47,32 +47,33 @@ For more control, you can use the `useMarquee` hook. This is particularly useful
 - Share the same marquee instance configuration across multiple elements
 - Have more granular control over the marquee instance, like controlling its `speedFactor`.
 
+Let's make an example with [lenis](https://github.com/darkroomengineering/lenis) from darkroom.engineering.
+
 ```tsx
 import { useMarquee, Marquee } from '@joycostudio/marquee'
+import { useLenis } from 'lenis'
 
-function InverstorsMarquee() {
-  // Create a shared marquee instance
-  const [ref, api] = useMarquee({
-    speed: 1,
-    speedFactor: 1,
-    direction: 1,
-    play: true,
+const ScrollVelocityBoundMarquee = ({ inverted }: { inverted?: boolean }) => {
+  const [ref, marquee] = useMarquee({ speed: DEFAULT_SPEED, speedFactor: 1, direction: inverted ? -1 : 1 })
+  const lastSign = useRef<number>(1)
+
+  useLenis(({ velocity }) => {
+    if (!marquee) return
+    const sign = Math.sign(velocity)
+    if (sign === 0) return
+    lastSign.current = sign
+    marquee.setSpeedFactor((1 * sign + velocity / 5) * (inverted ? -1 : 1))
   })
 
-  useEffect(() => {
-    /* px per second */
-    api.setSpeed(100)
-  }, [])
-
   return (
-    <div>
-      <Marquee instance={[ref, api]}>
-        <div>First marquee content</div>
-      </Marquee>
-    </div>
+    <Marquee instance={[ref, marquee]}>
+      <MarqueeContent className="text-[100px]" />
+    </Marquee>
   )
 }
 ```
+
+Notice how we are using the same `<Marquee>` component, but instead, we are just passing an `instance` prop that expects to receive the return type of the `useMarquee` hook. It will just serve as a shell to add the necessary html and styles to make the marquee work.
 
 The `useMarquee` hook returns a tuple containing:
 
