@@ -1,5 +1,12 @@
 # @joycostudio/marquee
 
+## 0.0.7
+
+### Patch Changes
+
+- 88c741b: fix change direction while paused re-plays the marquee
+- 203a3e3: make speedFactor prop optional in react component. Default to 1.
+
 ## 0.0.6
 
 ### Patch Changes
