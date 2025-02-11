@@ -1,6 +1,7 @@
 import { useRef, useState } from 'react'
 import { Marquee, useMarquee } from '@joycostudio/marquee/react'
-
+import * as Slider from '@radix-ui/react-slider'
+import NumberFlow from '@number-flow/react'
 import { useLenis } from '@/lib/scroll'
 import Logo from '@/components/logo'
 import { cn } from '@/lib/cn'
@@ -77,7 +78,6 @@ const ConfigMarquee = () => {
   const [speedFactor, setSpeedFactor] = useState(1)
   const [direction, setDirection] = useState<1 | -1>(1)
   const [play, setPlay] = useState(true)
-  const [isDragging, setIsDragging] = useState(false)
 
   const labelClassName = cn('font-mono text-background font-medium uppercase text-em-[16/16]')
 
@@ -156,31 +156,33 @@ const ConfigMarquee = () => {
         <div className="flex flex-col gap-em-[8] items-center">
           <p className={labelClassName}>Speed (px/s)</p>
           <div
-            className="relative w-em-[300] border-2 border-background h-em-[64] bg-background/10 rounded-em-[6] cursor-pointer flex items-center"
-            onMouseDown={(e) => {
-              setIsDragging(true)
-              const rect = e.currentTarget.getBoundingClientRect()
-              const x = e.clientX - rect.left
-              const percentage = x / rect.width
-              setPxPerSecond(Math.round(percentage * 1000))
+            className="relative w-em-[350] border-2 border-background h-em-[64] rounded-em-[6] flex items-center px-em-[6]"
+            style={{
+              backgroundColor: `rgba(55, 55, 55, ${(pxPerSecond / 1000) * 0.2})`,
             }}
-            onMouseMove={(e) => {
-              if (!isDragging) return
-              const rect = e.currentTarget.getBoundingClientRect()
-              const x = e.clientX - rect.left
-              const percentage = Math.max(0, Math.min(1, x / rect.width))
-              setPxPerSecond(Math.round(percentage * 1000))
-            }}
-            onMouseUp={() => setIsDragging(false)}
-            onMouseLeave={() => setIsDragging(false)}
           >
-            <IconButton
-              variant="filled"
-              className="cursor-grab absolute"
-              style={{ left: `${(pxPerSecond / 1000) * 100}%` }}
+            <NumberFlow
+              className="absolute left-1/2 -translate-x-1/2 font-mono text-background/80 font-medium"
+              suffix="px"
+              value={pxPerSecond}
+            />
+            <Slider.Root
+              className="relative flex items-center select-none touch-none w-full"
+              value={[pxPerSecond]}
+              onValueChange={([value]) => setPxPerSecond(value)}
+              max={1000}
+              step={1}
+              defaultValue={[DEFAULT_SPEED]}
             >
-              <DoubleCaretRightIcon className="size-em-[32]" />
-            </IconButton>
+              <Slider.Track className="relative grow h-full opacity-0">
+                <Slider.Range className="absolute h-full opacity-0" />
+              </Slider.Track>
+              <Slider.Thumb asChild>
+                <IconButton variant="filled">
+                  <DoubleCaretRightIcon className="size-em-[28] text-foreground" />
+                </IconButton>
+              </Slider.Thumb>
+            </Slider.Root>
           </div>
         </div>
 
