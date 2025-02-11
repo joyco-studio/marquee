@@ -4,8 +4,11 @@ import { Marquee, useMarquee } from '@joycostudio/marquee/react'
 import { useLenis } from '@/lib/scroll'
 import Logo from '@/components/logo'
 import { cn } from '@/lib/cn'
-import { PauseIcon, PlayIcon, ArrowLeftIcon, ArrowRightIcon } from '@/components/icons'
 import { IconButton } from '@/components/icon-button'
+import ArrowLeftIcon from '@/components/icons/arrow-left'
+import ArrowRightIcon from '@/components/icons/arrow-right'
+import PauseIcon from '@/components/icons/pause'
+import PlayIcon from '@/components/icons/play'
 
 const DEFAULT_SPEED = 300
 
@@ -76,9 +79,11 @@ const ConfigMarquee = () => {
   const [play, setPlay] = useState(true)
   const [isDragging, setIsDragging] = useState(false)
 
+  const labelClassName = cn('font-mono font-medium uppercase text-em-[16/16]')
+
   return (
     <div className="my-em-[150] flex flex-col items-center">
-      <div className="flex flex-col items-center text-foreground py-em-[40] bg-foreground/10">
+      <div className="w-full max-w-full flex flex-col items-center text-foreground py-em-[40] bg-foreground/10">
         <div
           style={{
             maskImage: 'linear-gradient(to right, transparent, black 20%, black 80%, transparent)',
@@ -131,19 +136,19 @@ const ConfigMarquee = () => {
       <div className="relative flex mx-auto gap-y-12 gap-x-4 mt-em-[-24] items-center justify-center bg-foreground p-em-[32] rounded-em-[12]">
         <div className="flex flex-col gap-em-[8] items-center">
           <p className="text-sm font-medium font-mono uppercase text-background">State</p>
-          <IconButton size="large" variant={play ? 'filled' : 'outline'} onClick={() => setPlay(!play)}>
-            {play ? <PauseIcon /> : <PlayIcon />}
+          <IconButton size="large" variant={play ? 'outline' : 'filled'} onClick={() => setPlay(!play)}>
+            {play ? <PauseIcon className="size-em-[32]" /> : <PlayIcon className="size-em-[32]" />}
           </IconButton>
         </div>
 
         <div className="flex flex-col gap-em-[8] items-center">
-          <p className="text-sm font-medium font-mono text-background">Direction</p>
+          <p className={labelClassName}>Direction</p>
           <div className="flex gap-2">
-            <IconButton size="large" variant={direction === -1 ? 'filled' : 'outline'} onClick={() => setDirection(-1)}>
-              <ArrowLeftIcon />
-            </IconButton>
             <IconButton size="large" variant={direction === 1 ? 'filled' : 'outline'} onClick={() => setDirection(1)}>
-              <ArrowRightIcon />
+              <ArrowLeftIcon className="size-em-[32]" />
+            </IconButton>
+            <IconButton size="large" variant={direction === -1 ? 'filled' : 'outline'} onClick={() => setDirection(-1)}>
+              <ArrowRightIcon className="size-em-[32]" />
             </IconButton>
           </div>
         </div>
@@ -184,7 +189,7 @@ const ConfigMarquee = () => {
         </div>
 
         <div className="flex flex-col gap-em-[8] items-center">
-          <p className="text-sm font-medium text-background">Speed Factor</p>
+          <p className={labelClassName}>Speed Factor</p>
           <div className="flex gap-2">
             {[0.25, 0.5, 1].map((factor) => (
               <IconButton
