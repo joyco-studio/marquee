@@ -7,14 +7,13 @@ export default defineConfig(({ isSsrBuild, command }) => ({
   build: {
     rollupOptions: isSsrBuild
       ? {
-          input: './server/app.ts',
-        }
+        input: './server/app.ts',
+      }
       : undefined,
   },
   ssr: {
     // add here libraries such as basehub, tempus, lenis
     noExternal: command === 'build' ? true : ['gsap'],
-    external: ['@joycostudio/marquee'],
   },
   server: {
     port: 3000,
