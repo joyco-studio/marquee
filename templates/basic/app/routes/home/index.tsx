@@ -53,7 +53,7 @@ const InstallCommand = () => {
         value={packageManager}
         onValueChange={(value: string) => setPackageManager(value as keyof typeof PACKAGE_MANAGERS)}
       >
-        <Select.Trigger className="text-background font-mono text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20">
+        <Select.Trigger className="font-mono text-sm text-background focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20">
           <Select.Value />
         </Select.Trigger>
         <Select.Portal>
@@ -72,7 +72,7 @@ const InstallCommand = () => {
           </Select.Content>
         </Select.Portal>
       </Select.Root>
-      <div className="font-mono text-background text-sm flex-1">{PACKAGE_MANAGERS[packageManager].display}</div>
+      <div className="flex-1 font-mono text-sm text-background">{PACKAGE_MANAGERS[packageManager].display}</div>
       <IconButton
         variant="outline"
         onClick={handleCopy}
@@ -291,12 +291,12 @@ const ConfigMarquee = () => {
               </g>
             </svg>
             <NumberFlow
-              className="absolute left-1/2 -translate-x-1/2 font-mono text-background/80 font-medium"
+              className="absolute font-mono font-medium -translate-x-1/2 left-1/2 text-background/80"
               value={Math.round(speedFactor * 100)}
               suffix="%"
             />
             <Slider.Root
-              className="relative flex items-center select-none touch-none w-full"
+              className="relative flex items-center w-full select-none touch-none"
               value={[speedFactor]}
               onValueChange={([value]) => setSpeedFactor(value)}
               max={1}
@@ -304,13 +304,13 @@ const ConfigMarquee = () => {
               step={0.01}
               defaultValue={[1]}
             >
-              <Slider.Track className="relative grow h-full opacity-0">
+              <Slider.Track className="relative h-full opacity-0 grow">
                 <Slider.Range className="absolute h-full opacity-0" />
               </Slider.Track>
               <Slider.Thumb asChild>
                 <IconButton
                   variant="filled"
-                  className="focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 active:scale-95 transition-transform"
+                  className="transition-transform focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 active:scale-95"
                 >
                   <DoubleCaretRightIcon className="size-em-[28] text-foreground" />
                 </IconButton>
@@ -364,14 +364,23 @@ const SocialBlock = ({
   )
 }
 
+const Pattern = () => {
+  return (
+    <div className="relative w-full bg-background -z-1">
+      <img className="w-full translate-y-[1%]" style={{ aspectRatio: 1920 / 400 }} src="/full-w-halftone.png" />
+    </div>
+  )
+}
+
 export default function Home() {
   return (
     <div className="">
       <Hero />
       <ConfigMarquee />
-      <div className="h-[400vh] text-black">
-        <div className="h-screen bg-foreground font-mono uppercase py-12 sticky min-h-max items-center left-0 top-0 w-full gap-y-10 flex flex-col justify-center">
-          <div className="absolute inset-0 overflow-hidden">
+      <div className="h-[400vh] text-black bg-foreground">
+        <Pattern />
+        <div className="sticky top-0 left-0 z-10 flex flex-col items-center justify-center w-full h-screen py-12 font-mono uppercase min-h-max gap-y-10">
+          <div className="absolute inset-0 overflow-x-clip">
             <div className="absolute py-em-[10/16] rotate-[10deg] left-1/2 -translate-x-1/2 z-10">
               <ScrollBoundMarquee className="w-[120vw]" inverted />
             </div>
@@ -385,7 +394,7 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="relative leading-none font-medium">
+          <div className="relative font-medium leading-none">
             <p className="text-center text-em-[16/16]">
               We’re always cooking, so <br />
               if you don’t want to lose a thing
