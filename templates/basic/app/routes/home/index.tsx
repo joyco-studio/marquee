@@ -1,11 +1,11 @@
 import { useRef, useState } from 'react'
 import { Marquee, useMarquee } from '@joycostudio/marquee/react'
-import { Input } from './components/input'
-import { Button } from './components/button'
-import { Slider } from './components/slider'
-import { cn, rangeRemap } from '@/lib/utils'
+
 import { useLenis } from '@/lib/scroll'
 import Logo from '@/components/logo'
+import { cn } from '@/lib/cn'
+import { PauseIcon, PlayIcon, ArrowLeftIcon, ArrowRightIcon } from '@/components/icons'
+import { IconButton } from '@/components/icon-button'
 
 const DEFAULT_SPEED = 300
 
@@ -71,16 +71,14 @@ const Hero = () => {
 
 const ConfigMarquee = () => {
   const [pxPerSecond, setPxPerSecond] = useState(DEFAULT_SPEED)
-  const [speedFactor, setSpeedFactor] = useState(100)
+  const [speedFactor, setSpeedFactor] = useState(1)
   const [direction, setDirection] = useState<1 | -1>(1)
   const [play, setPlay] = useState(true)
-  const toggleDirection = () => {
-    setDirection((prev) => (prev === 1 ? -1 : 1))
-  }
+  const [isDragging, setIsDragging] = useState(false)
 
   return (
-    <div className="">
-      <div className="flex flex-col items-center text-foreground my-em-[150]">
+    <div className="my-em-[150] flex flex-col items-center">
+      <div className="flex flex-col items-center text-foreground py-em-[40] bg-foreground/10">
         <div
           style={{
             maskImage: 'linear-gradient(to right, transparent, black 20%, black 80%, transparent)',
@@ -104,13 +102,13 @@ const ConfigMarquee = () => {
           <Marquee
             rootClassName="mt-em-[-16]"
             speed={pxPerSecond}
-            speedFactor={rangeRemap(speedFactor, 0, 100, 0, 1)}
+            speedFactor={speedFactor}
             direction={direction}
             play={play}
           >
             <div className="flex">
               {Array.from({ length: 4 }).map((_, index) => (
-                <div className="flex items-center gap-x-em-[48]" key={index}>
+                <div className="flex items-center gap-x-em-[48] px-em-[24]" key={index}>
                   <span className={cn('font-semibold uppercase whitespace-nowrap text-em-[164/16] leading-[1]')}>
                     THE ONLY
                   </span>
@@ -122,48 +120,83 @@ const ConfigMarquee = () => {
                   <span className={cn('font-semibold uppercase whitespace-nowrap text-em-[164/16] leading-[1]')}>
                     YOU WILL EVER NEED
                   </span>
+                  <Logo className="size-em-[120/16] mt-em-[12]" />
                 </div>
               ))}
             </div>
           </Marquee>
         </div>
-
-        <div className="flex h-em-[40] w-em-[400] bg-foreground rounded-em-[12] mt-em-[40]"></div>
       </div>
-      <div className="flex mx-auto max-w-[300px] flex-col gap-y-12 gap-x-4 items-center justify-center mt-24">
-        <div className="w-full space-y-2">
-          <p className="text-muted-foreground font-semibold">Speed (px/s)</p>
-          <Input
-            placeholder="Speed"
-            className="w-32"
-            defaultValue={DEFAULT_SPEED}
-            onBlur={(e) => setPxPerSecond(Number(e.target.value))}
-            onKeyDown={(e) => {
-              if (e.key === 'Enter') {
-                e.preventDefault()
-                e.currentTarget.blur()
-              }
+
+      <div className="relative flex mx-auto gap-y-12 gap-x-4 mt-em-[-24] items-center justify-center bg-foreground p-em-[32] rounded-em-[12]">
+        <div className="flex flex-col gap-em-[8] items-center">
+          <p className="text-sm font-medium font-mono uppercase text-background">State</p>
+          <IconButton size="large" variant={play ? 'filled' : 'outline'} onClick={() => setPlay(!play)}>
+            {play ? <PauseIcon /> : <PlayIcon />}
+          </IconButton>
+        </div>
+
+        <div className="flex flex-col gap-em-[8] items-center">
+          <p className="text-sm font-medium font-mono text-background">Direction</p>
+          <div className="flex gap-2">
+            <IconButton size="large" variant={direction === -1 ? 'filled' : 'outline'} onClick={() => setDirection(-1)}>
+              <ArrowLeftIcon />
+            </IconButton>
+            <IconButton size="large" variant={direction === 1 ? 'filled' : 'outline'} onClick={() => setDirection(1)}>
+              <ArrowRightIcon />
+            </IconButton>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-em-[8] items-center">
+          <p className="text-sm font-medium font-mono text-background">Speed (px/s)</p>
+          <div
+            className="relative h-10 bg-background/10 rounded-lg cursor-pointer"
+            onMouseDown={(e) => {
+              setIsDragging(true)
+              const rect = e.currentTarget.getBoundingClientRect()
+              const x = e.clientX - rect.left
+              const percentage = x / rect.width
+              setPxPerSecond(Math.round(percentage * 1000))
             }}
-          />
+            onMouseMove={(e) => {
+              if (!isDragging) return
+              const rect = e.currentTarget.getBoundingClientRect()
+              const x = e.clientX - rect.left
+              const percentage = Math.max(0, Math.min(1, x / rect.width))
+              setPxPerSecond(Math.round(percentage * 1000))
+            }}
+            onMouseUp={() => setIsDragging(false)}
+            onMouseLeave={() => setIsDragging(false)}
+          >
+            <div
+              className="absolute inset-y-0 left-0 bg-background rounded-lg transition-all"
+              style={{
+                width: `${(pxPerSecond / 1000) * 100}%`,
+                backgroundImage: `url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h3l3 3v3H3L0 3z' fill='%23fff' fill-opacity='.1'/%3E%3C/svg%3E")`,
+              }}
+            />
+            <div
+              className="absolute top-1/2 -translate-y-1/2 size-4 bg-foreground border-2 border-background rounded-full transition-all"
+              style={{ left: `${(pxPerSecond / 1000) * 100}%` }}
+            />
+          </div>
         </div>
 
-        <div className="w-full space-y-2">
-          <p className="text-muted-foreground font-semibold">Speed Factor</p>
-          <Slider onValueChange={([v]) => setSpeedFactor(v)} defaultValue={[speedFactor]} max={100} step={1} />
-        </div>
-
-        <div className="w-full space-y-2">
-          <p className="text-muted-foreground font-semibold">Direction</p>
-          <Button className="w-full" onClick={toggleDirection}>
-            {direction === 1 ? 'Forward' : 'Backward'}
-          </Button>
-        </div>
-
-        <div className="w-full space-y-2">
-          <p className="text-muted-foreground font-semibold">Playstate</p>
-          <Button className="w-full" onClick={() => setPlay((prev) => !prev)}>
-            {play ? 'Pause' : 'Play'}
-          </Button>
+        <div className="flex flex-col gap-em-[8] items-center">
+          <p className="text-sm font-medium text-background">Speed Factor</p>
+          <div className="flex gap-2">
+            {[0.25, 0.5, 1].map((factor) => (
+              <IconButton
+                key={factor}
+                size="large"
+                variant={speedFactor === factor ? 'filled' : 'outline'}
+                onClick={() => setSpeedFactor(factor)}
+              >
+                <span className="text-sm font-medium">{factor}x</span>
+              </IconButton>
+            ))}
+          </div>
         </div>
       </div>
     </div>
