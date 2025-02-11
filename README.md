@@ -54,7 +54,7 @@ import { useMarquee, Marquee } from '@joycostudio/marquee'
 import { useLenis } from 'lenis'
 
 const ScrollVelocityBoundMarquee = ({ inverted }: { inverted?: boolean }) => {
-  const [ref, marquee] = useMarquee({ speed: DEFAULT_SPEED, speedFactor: 1, direction: inverted ? -1 : 1 })
+  const [ref, marquee] = useMarquee({ speed: 100, speedFactor: 1, direction: inverted ? -1 : 1 })
   const lastSign = useRef<number>(1)
 
   useLenis(({ velocity }) => {
