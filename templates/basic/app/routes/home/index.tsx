@@ -79,11 +79,11 @@ const ConfigMarquee = () => {
   const [play, setPlay] = useState(true)
   const [isDragging, setIsDragging] = useState(false)
 
-  const labelClassName = cn('font-mono font-medium uppercase text-em-[16/16]')
+  const labelClassName = cn('font-mono text-background font-medium uppercase text-em-[16/16]')
 
   return (
     <div className="my-em-[150] flex flex-col items-center">
-      <div className="w-full max-w-full flex flex-col items-center text-foreground py-em-[40] bg-foreground/10">
+      <div className="w-full flex flex-col items-center text-foreground py-em-[40] bg-foreground/10">
         <div
           style={{
             maskImage: 'linear-gradient(to right, transparent, black 20%, black 80%, transparent)',
