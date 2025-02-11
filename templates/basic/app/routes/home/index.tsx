@@ -14,6 +14,7 @@ import PlayIcon from '@/components/icons/play'
 import DoubleCaretRightIcon from '@/components/icons/double-caret-right'
 import CopyIcon from '@/components/icons/copy'
 import CheckIcon from '@/components/icons/check'
+import CaretDownIcon from '@/components/icons/caret-down'
 const DEFAULT_SPEED = 300
 
 const PACKAGE_MANAGERS = {
@@ -33,14 +34,18 @@ const InstallCommand = () => {
     setTimeout(() => setCopied(false), 2000)
   }
 
+  const options = Object.entries(PACKAGE_MANAGERS)
+  const selectedIndex = options.findIndex(([key]) => key === packageManager)
+
   return (
-    <div className="flex h-em-[40] w-em-[400] bg-foreground rounded-em-[6] mt-em-[40] items-center gap-em-[12]">
+    <div className="flex h-em-[48] bg-foreground rounded-em-[6] mt-em-[40] items-center gap-em-[12]">
       <Select.Root
         value={packageManager}
         onValueChange={(value: string) => setPackageManager(value as keyof typeof PACKAGE_MANAGERS)}
       >
-        <Select.Trigger className="text-background font-mono text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20">
+        <Select.Trigger className="w-em-[100] px-em-[12] h-full flex items-center justify-between text-background font-mono text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/2 border-r-2 border-background">
           <Select.Value />
+          <CaretDownIcon className="size-em-[20] ml-em-[4]" />
         </Select.Trigger>
         <Select.Portal>
           <Select.Content className="bg-foreground rounded-em-[6] p-em-[6]">
@@ -58,11 +63,30 @@ const InstallCommand = () => {
           </Select.Content>
         </Select.Portal>
       </Select.Root>
-      <div className="font-mono text-background text-sm flex-1">{PACKAGE_MANAGERS[packageManager].display}</div>
+      <div
+        className={cn(
+          'h-em-[48] flex flex-col relative overflow-hidden before:absolute',
+          'before:inset-x-0 before:top-0 before:h-em-[8] before:bg-gradient-to-b before:from-foreground before:to-transparent',
+          'after:absolute after:inset-x-0 after:bottom-0 after:h-em-[8] after:bg-gradient-to-t after:from-foreground after:to-transparent'
+        )}
+      >
+        <div
+          className="relative transition-transform duration-300 ease-in-out"
+          style={{
+            transform: `translateY(-${selectedIndex * (100 / options.length)}%)`,
+          }}
+        >
+          {options.map(([key, value]) => (
+            <div key={key} className="font-mono text-background text-em-[14/16] h-em-[48] flex items-center">
+              {value.display}
+            </div>
+          ))}
+        </div>
+      </div>
       <IconButton
         variant="outline"
         onClick={handleCopy}
-        className="border-0 border-l-2 text-background hover:bg-background/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
+        className="border-0 border-l-2 !rounded-l-none !rounded-r-em-[6] text-background hover:bg-background/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
       >
         {copied ? <CheckIcon className="size-em-[20]" /> : <CopyIcon className="size-em-[20]" />}
       </IconButton>
