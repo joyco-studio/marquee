@@ -13,7 +13,7 @@ export default defineConfig(({ isSsrBuild, command }) => ({
   },
   ssr: {
     // add here libraries such as basehub, tempus, lenis
-    noExternal: command === 'build' ? true : ['gsap'],
+    noExternal: command === 'build' ? true : ['gsap', '@joycostudio/marquee'],
   },
   server: {
     port: 3000,
