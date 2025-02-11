@@ -6,10 +6,6 @@ import { Slider } from './components/slider'
 import { cn, rangeRemap } from '@/lib/utils'
 import { useLenis } from '@/lib/scroll'
 
-export function meta() {
-  return [{ title: 'New React Router App' }, { name: 'description', content: 'Welcome to React Router!' }]
-}
-
 const DEFAULT_SPEED = 300
 
 const MarqueeContent = ({ className }: { className?: string }) => {
