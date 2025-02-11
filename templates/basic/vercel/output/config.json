@@ -1,0 +1,13 @@
+{
+  "version": 3,
+  "routes": [
+    {
+      "src": "/(.*\\.(png|jpg|jpeg|gif|webp|ico|css|js|woff|woff2|ttf|svg|webmanifest|xml|txt))",
+      "dest": "/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/"
+    }
+  ]
+}

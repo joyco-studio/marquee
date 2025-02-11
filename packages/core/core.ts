@@ -78,9 +78,13 @@ class Marquee {
       iterations: Infinity,
     })
 
-    this.animation.playbackRate = this.speedFactor
+    if (!this.playing) {
+      this.animation.pause()
+    } else {
+      this.playing = true
+    }
 
-    this.playing = true
+    this.animation.playbackRate = this.speedFactor
 
     // If startProgress is provided, set the animation to start from that point
     if (startProgress !== undefined && this.animation.effect) {
