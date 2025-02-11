@@ -413,7 +413,7 @@ export default function Home() {
     <div className="">
       <Hero />
       <ConfigMarquee />
-      <div className="h-[400vh] text-black bg-foreground">
+      <div className="h-[400vh] text-primary bg-foreground">
         <Pattern />
         <div className="sticky top-0 left-0 z-10 flex flex-col items-center justify-center w-full h-screen py-12 font-mono uppercase min-h-max gap-y-10">
           <div className="absolute inset-0 overflow-x-clip">
