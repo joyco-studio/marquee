@@ -26,6 +26,12 @@
   }
 }
 
+@screen 3xl {
+  :root {
+    --base-viewport: 2525;
+  }
+}
+
 html,
 body {
   font-size: var(--dynamic-base-size);
