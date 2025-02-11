@@ -3,7 +3,7 @@ import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, ScrollRestoration, 
 import type { Route } from './+types/root'
 import './app.css'
 import '@/lib/scroll'
-import Header from './components'
+import Header from './components/header'
 import { generateMeta } from './lib/meta'
 import { SITE_URL } from './lib/constants'
 import { generateLinks } from './lib/links'

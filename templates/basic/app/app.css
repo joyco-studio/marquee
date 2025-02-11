@@ -1,27 +1,37 @@
-@import 'tailwindcss';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-@theme {
-  --font-sans: 'Barlow Condensed', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-    'Segoe UI Symbol', 'Noto Color Emoji';
-  --font-mono: 'Roboto Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New',
-    monospace;
-  --color-primary: #ffffff;
-  --color-secondary: #000000;
-  --color-primary-foreground: #000000;
-  --color-secondary-foreground: #ffffff;
-  --color-primary-background: #ffffff;
-  --color-secondary-background: #000000;
-  --color-background: #0344dc;
-  --color-foreground: #ffffff;
-  --color-muted: #000000;
-  --color-muted-foreground: #ffffff;
+:root {
+  --base-viewport: 480;
+  --base-size: 16;
+  --dynamic-base-size: calc(var(--base-size) / var(--base-viewport) * 100vw);
+}
+
+@screen sm {
+  :root {
+    --base-viewport: 768;
+  }
+}
+
+@screen md {
+  :root {
+    --base-viewport: 1024;
+  }
+}
+
+@screen lg {
+  :root {
+    --base-viewport: 1920;
+  }
 }
 
 html,
 body {
-  @apply bg-white dark:bg-zinc-950;
-
+  font-size: var(--dynamic-base-size);
   overscroll-behavior: none;
+
+  @apply bg-background dark:bg-zinc-950;
 
   @media (prefers-color-scheme: dark) {
     color-scheme: dark;

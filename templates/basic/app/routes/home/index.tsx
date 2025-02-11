@@ -5,6 +5,7 @@ import { Button } from './components/button'
 import { Slider } from './components/slider'
 import { cn, rangeRemap } from '@/lib/utils'
 import { useLenis } from '@/lib/scroll'
+import Logo from '@/components/logo'
 
 const DEFAULT_SPEED = 300
 
@@ -39,21 +40,31 @@ const ScrollBoundMarquee = ({ inverted }: { inverted?: boolean }) => {
   )
 }
 
-const Header = () => {
+const Hero = () => {
   return (
-    <div className="w-full flex justify-center items-center h-20">
-      <svg className="h-8" viewBox="0 0 378 271" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <g>
-          <path
-            d="M143.917 89.923C168.749 89.923 188.879 69.7931 188.879 44.9615C188.879 20.1299 168.749 0 143.917 0C119.086 0 98.9556 20.1299 98.9556 44.9615C98.9556 69.7931 119.086 89.923 143.917 89.923Z"
-            fill="#FAFAFA"
-          />
-          <path
-            d="M341.138 89.9326C324.481 89.9326 309.922 101.168 305.775 117.279C292.058 170.488 241.177 199.444 188.84 198.735C136.513 199.444 85.6222 170.488 71.9058 117.279C67.7583 101.168 53.1894 89.9326 36.5419 89.9326C13.4865 89.9326 -3.774 111.015 0.699161 133.63C18.7738 224.97 103.802 270.631 188.831 270.669C273.859 270.641 358.887 224.97 376.962 133.63C381.435 111.015 364.175 89.9326 341.119 89.9326H341.138Z"
-            fill="#FAFAFA"
-          />
-        </g>
-      </svg>
+    <div className="flex flex-col items-center text-foreground my-em-[150]">
+      <p className="font-mono font-medium text-em-[20/16]">THE ALL IN ONE MARQUEE</p>
+      <div
+        style={{
+          maskImage: 'linear-gradient(to right, transparent, black 20%, black 80%, transparent)',
+        }}
+        className="w-full max-w-full lg:max-w-em-[1000]"
+      >
+        <Marquee speed={75} direction={1} play={true}>
+          <div className="flex">
+            {Array.from({ length: 4 }).map((_, index) => (
+              <span
+                className={cn('font-semibold uppercase whitespace-nowrap text-em-[96/16] leading-[1] px-em-[16]')}
+                key={index}
+              >
+                @joycostudio/marquee
+              </span>
+            ))}
+          </div>
+        </Marquee>
+      </div>
+
+      <div className="flex h-em-[40] w-em-[400] bg-foreground rounded-em-[12] mt-em-[40]"></div>
     </div>
   )
 }
@@ -68,23 +79,57 @@ const ConfigMarquee = () => {
   }
 
   return (
-    <div className="w-full">
-      <div
-        style={{
-          maskImage: 'linear-gradient(to right, transparent, black 20%, black 80%, transparent)',
-        }}
-        className="w-full max-w-full"
-      >
-        <Marquee
-          speed={pxPerSecond}
-          speedFactor={rangeRemap(speedFactor, 0, 100, 0, 1)}
-          direction={direction}
-          play={play}
+    <div className="">
+      <div className="flex flex-col items-center text-foreground my-em-[150]">
+        <div
+          style={{
+            maskImage: 'linear-gradient(to right, transparent, black 20%, black 80%, transparent)',
+          }}
+          className="w-full max-w-full"
         >
-          <MarqueeContent />
-        </Marquee>
-      </div>
+          <Marquee speed={75} direction={1} play={true}>
+            <div className="flex opacity-50">
+              {Array.from({ length: 10 }).map((_, index) => (
+                <span
+                  className={cn(
+                    'font-medium font-mono uppercase whitespace-nowrap text-em-[24/16] leading-[1] px-em-[16]'
+                  )}
+                  key={index}
+                >
+                  Performant marquee animations built on top of Web Animations API
+                </span>
+              ))}
+            </div>
+          </Marquee>
+          <Marquee
+            rootClassName="mt-em-[-16]"
+            speed={pxPerSecond}
+            speedFactor={rangeRemap(speedFactor, 0, 100, 0, 1)}
+            direction={direction}
+            play={play}
+          >
+            <div className="flex">
+              {Array.from({ length: 4 }).map((_, index) => (
+                <div className="flex items-center gap-x-em-[48]" key={index}>
+                  <span className={cn('font-semibold uppercase whitespace-nowrap text-em-[164/16] leading-[1]')}>
+                    THE ONLY
+                  </span>
+                  <Logo className="size-em-[120/16] mt-em-[12]" />
+                  <span className={cn('font-semibold uppercase whitespace-nowrap text-em-[164/16] leading-[1]')}>
+                    MARQUEE
+                  </span>
+                  <Logo className="size-em-[120/16] mt-em-[12]" />
+                  <span className={cn('font-semibold uppercase whitespace-nowrap text-em-[164/16] leading-[1]')}>
+                    YOU WILL EVER NEED
+                  </span>
+                </div>
+              ))}
+            </div>
+          </Marquee>
+        </div>
 
+        <div className="flex h-em-[40] w-em-[400] bg-foreground rounded-em-[12] mt-em-[40]"></div>
+      </div>
       <div className="flex mx-auto max-w-[300px] flex-col gap-y-12 gap-x-4 items-center justify-center mt-24">
         <div className="w-full space-y-2">
           <p className="text-muted-foreground font-semibold">Speed (px/s)</p>
@@ -124,14 +169,11 @@ const ConfigMarquee = () => {
     </div>
   )
 }
-
 export default function Home() {
   return (
-    <div className="bg-gradient-to-b from-background to-[#000000]">
-      <Header />
-      <div className="h-screen flex items-center justify-center">
-        <ConfigMarquee />
-      </div>
+    <div className="">
+      <Hero />
+      <ConfigMarquee />
       <div className="h-[400vh]">
         <div className="h-screen py-12 sticky min-h-max items-center left-0 top-0 w-full gap-y-10 flex flex-col justify-between">
           <ScrollBoundMarquee inverted />

@@ -1,4 +1,4 @@
-import { prependProtocol } from './index'
+import { prependProtocol } from '../lib'
 
 export const isServer = typeof window === 'undefined'
 
