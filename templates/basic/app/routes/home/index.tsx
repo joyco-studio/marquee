@@ -43,12 +43,17 @@ const InstallCommand = () => {
         value={packageManager}
         onValueChange={(value: string) => setPackageManager(value as keyof typeof PACKAGE_MANAGERS)}
       >
-        <Select.Trigger className="w-em-[100] px-em-[12] h-full flex items-center justify-between text-background font-mono text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/2 border-r-2 border-background">
+        <Select.Trigger className="w-em-[100] px-em-[12] h-full flex items-center justify-between text-background font-mono text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 border-r-2 border-background">
           <Select.Value />
           <CaretDownIcon className="size-em-[20] ml-em-[4]" />
         </Select.Trigger>
         <Select.Portal>
-          <Select.Content className="bg-foreground rounded-em-[6] p-em-[6]">
+          <Select.Content
+            className="bg-foreground rounded-em-[6] p-em-[6] overflow-hidden w-[--radix-select-trigger-width]"
+            position="popper"
+            sideOffset={4}
+            align="start"
+          >
             <Select.Viewport>
               {Object.keys(PACKAGE_MANAGERS).map((pm) => (
                 <Select.Item
@@ -65,9 +70,9 @@ const InstallCommand = () => {
       </Select.Root>
       <div
         className={cn(
-          'h-em-[48] flex flex-col relative overflow-hidden before:absolute',
-          'before:inset-x-0 before:top-0 before:h-em-[8] before:bg-gradient-to-b before:from-foreground before:to-transparent',
-          'after:absolute after:inset-x-0 after:bottom-0 after:h-em-[8] after:bg-gradient-to-t after:from-foreground after:to-transparent'
+          'flex-1 h-em-[48] flex flex-col relative overflow-hidden',
+          'before:absolute before:z-10 before:inset-x-0 before:top-0 before:h-em-[12] before:bg-gradient-to-b before:from-foreground before:to-transparent',
+          'after:absolute after:z-10 after:inset-x-0 after:bottom-0 after:h-em-[12] after:bg-gradient-to-t after:from-foreground after:to-transparent'
         )}
       >
         <div
@@ -88,7 +93,14 @@ const InstallCommand = () => {
         onClick={handleCopy}
         className="border-0 border-l-2 !rounded-l-none !rounded-r-em-[6] text-background hover:bg-background/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
       >
-        {copied ? <CheckIcon className="size-em-[20]" /> : <CopyIcon className="size-em-[20]" />}
+        <div className="relative w-em-[20] h-em-[20]">
+          <div className={cn('absolute inset-0 transition-opacity duration-200', copied ? 'opacity-0' : 'opacity-100')}>
+            <CopyIcon className="size-em-[20]" />
+          </div>
+          <div className={cn('absolute inset-0 transition-opacity duration-200', copied ? 'opacity-100' : 'opacity-0')}>
+            <CheckIcon className="size-em-[20]" />
+          </div>
+        </div>
       </IconButton>
     </div>
   )
