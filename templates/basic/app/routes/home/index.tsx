@@ -154,25 +154,64 @@ const ConfigMarquee = () => {
         </div>
 
         <div className="flex flex-col gap-em-[8] items-center">
-          <p className={labelClassName}>Speed (px/s)</p>
-          <div
-            className="relative w-em-[350] border-2 border-background h-em-[64] rounded-em-[6] flex items-center px-em-[6]"
-            style={{
-              backgroundColor: `rgba(55, 55, 55, ${(pxPerSecond / 1000) * 0.2})`,
-            }}
-          >
+          <p className={labelClassName}>Speed Factor</p>
+          <div className="relative w-em-[350] border-2 border-background h-em-[64] rounded-em-[6] flex items-center px-em-[6] overflow-hidden">
+            <div
+              className="absolute inset-0"
+              style={{
+                background: `linear-gradient(90deg, 
+                  rgba(3, 68, 220, 0.05) 0%,
+                  rgba(3, 68, 220, 0.2) ${speedFactor * 100}%,
+                  rgba(3, 68, 220, 0.05) 100%
+                )`,
+              }}
+            />
+            <svg
+              className="absolute inset-0 w-full h-full"
+              viewBox="0 0 372 64"
+              fill="none"
+              preserveAspectRatio="repeat"
+            >
+              <g opacity="0.1">
+                <path
+                  d="M39.7082 64L71.5414 32.1667L39.7082 0.333496M-16 64L15.8333 32.1667L-16 0.333496"
+                  stroke="#0344DC"
+                  strokeWidth="15.9166"
+                  strokeLinecap="square"
+                />
+                <path
+                  d="M157.094 64L188.927 32.1667L157.094 0.333496M101.385 64L133.219 32.1667L101.385 0.333496"
+                  stroke="#0344DC"
+                  strokeWidth="15.9166"
+                  strokeLinecap="square"
+                />
+                <path
+                  d="M274.479 64L306.312 32.1667L274.479 0.333496M218.771 64L250.604 32.1667L218.771 0.333496"
+                  stroke="#0344DC"
+                  strokeWidth="15.9166"
+                  strokeLinecap="square"
+                />
+                <path
+                  d="M391.865 64L423.698 32.1667L391.865 0.333496M336.157 64L367.99 32.1667L336.157 0.333496"
+                  stroke="#0344DC"
+                  strokeWidth="15.9166"
+                  strokeLinecap="square"
+                />
+              </g>
+            </svg>
             <NumberFlow
               className="absolute left-1/2 -translate-x-1/2 font-mono text-background/80 font-medium"
-              suffix="px"
-              value={pxPerSecond}
+              value={Math.round(speedFactor * 100)}
+              suffix="%"
             />
             <Slider.Root
               className="relative flex items-center select-none touch-none w-full"
-              value={[pxPerSecond]}
-              onValueChange={([value]) => setPxPerSecond(value)}
-              max={1000}
-              step={1}
-              defaultValue={[DEFAULT_SPEED]}
+              value={[speedFactor]}
+              onValueChange={([value]) => setSpeedFactor(value)}
+              max={1}
+              min={0}
+              step={0.01}
+              defaultValue={[1]}
             >
               <Slider.Track className="relative grow h-full opacity-0">
                 <Slider.Range className="absolute h-full opacity-0" />
@@ -187,16 +226,16 @@ const ConfigMarquee = () => {
         </div>
 
         <div className="flex flex-col gap-em-[8] items-center">
-          <p className={labelClassName}>Speed Factor</p>
+          <p className={labelClassName}>Speed (px/s)</p>
           <div className="flex gap-2">
-            {[0.25, 0.5, 1].map((factor) => (
+            {[100, 300, 500].map((speed) => (
               <IconButton
-                key={factor}
+                key={speed}
                 size="large"
-                variant={speedFactor === factor ? 'filled' : 'outline'}
-                onClick={() => setSpeedFactor(factor)}
+                variant={pxPerSecond === speed ? 'filled' : 'outline'}
+                onClick={() => setPxPerSecond(speed)}
               >
-                <span className="text-sm font-medium">{factor}x</span>
+                <span className="text-sm font-medium">{speed}</span>
               </IconButton>
             ))}
           </div>
