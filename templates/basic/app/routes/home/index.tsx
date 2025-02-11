@@ -246,38 +246,40 @@ const ConfigMarquee = () => {
         </div>
       </div>
 
-      <div className="relative flex mx-auto gap-em-[40] mt-em-[-24] items-center justify-center bg-foreground p-em-[32] rounded-em-[12]">
-        <div className="flex flex-col gap-em-[8] items-center">
-          <p className={labelClassName}>State</p>
-          <IconButton
-            size="large"
-            variant={play ? 'outline' : 'filled'}
-            onClick={() => setPlay(!play)}
-            className="focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
-          >
-            {play ? <PauseIcon className="size-em-[32]" /> : <PlayIcon className="size-em-[32]" />}
-          </IconButton>
-        </div>
+      <div className="relative flex mx-auto md:flex-row flex-col gap-em-[40] mt-em-[-24] items-center justify-center bg-foreground p-em-[32] rounded-em-[12]">
+        <div className="flex gap-em-[40] md:contents">
+          <div className="flex flex-col gap-em-[8] items-center">
+            <p className={labelClassName}>State</p>
+            <IconButton
+              size="large"
+              variant={play ? 'outline' : 'filled'}
+              onClick={() => setPlay(!play)}
+              className="focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
+            >
+              {play ? <PauseIcon className="size-em-[32]" /> : <PlayIcon className="size-em-[32]" />}
+            </IconButton>
+          </div>
 
-        <div className="flex flex-col gap-em-[8] items-center">
-          <p className={labelClassName}>Direction</p>
-          <div className="flex gap-2">
-            <IconButton
-              size="large"
-              variant={direction === 1 ? 'filled' : 'outline'}
-              onClick={() => setDirection(1)}
-              className="focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
-            >
-              <ArrowLeftIcon className="size-em-[32]" />
-            </IconButton>
-            <IconButton
-              size="large"
-              variant={direction === -1 ? 'filled' : 'outline'}
-              onClick={() => setDirection(-1)}
-              className="focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
-            >
-              <ArrowRightIcon className="size-em-[32]" />
-            </IconButton>
+          <div className="flex flex-col gap-em-[8] items-center">
+            <p className={labelClassName}>Direction</p>
+            <div className="flex gap-2">
+              <IconButton
+                size="large"
+                variant={direction === 1 ? 'filled' : 'outline'}
+                onClick={() => setDirection(1)}
+                className="focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
+              >
+                <ArrowLeftIcon className="size-em-[32]" />
+              </IconButton>
+              <IconButton
+                size="large"
+                variant={direction === -1 ? 'filled' : 'outline'}
+                onClick={() => setDirection(-1)}
+                className="focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
+              >
+                <ArrowRightIcon className="size-em-[32]" />
+              </IconButton>
+            </div>
           </div>
         </div>
 
