@@ -24,7 +24,7 @@ import { Marquee } from '@joycostudio/marquee'
 function App() {
   return (
     <Marquee speed={1} speedFactor={1} direction={1} play={true}>
-      <div>Your scrolling content here</div>
+      <div>Your content here</div>
     </Marquee>
   )
 }

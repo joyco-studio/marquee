@@ -36,8 +36,7 @@ export const meta: MetaFunction = () => {
   const meta = generateMeta({
     strict: true,
     title: 'JOYCO | Marquee',
-    description:
-      'A high-performance marquee component leveraging the Web Animations API (WAAPI) for smooth, performant scrolling animations with precise control and runtime flexibility.',
+    description: 'A flexible marquee component that leverages the Web Animations API for smooth performant animations.',
     url: SITE_URL,
     siteName: 'JOYCO Marquee',
     image: { url: `${SITE_URL}/opengraph-image.png`, width: 1200, height: 630, type: 'image/png' },
@@ -83,7 +82,7 @@ export function ErrorBoundary({ error }: Route.ErrorBoundaryProps) {
   }
 
   return (
-    <main className="pt-16 p-4 container mx-auto">
+    <main className="container p-4 pt-16 mx-auto">
       <h1>{message}</h1>
       <p>{details}</p>
       {stack && (
