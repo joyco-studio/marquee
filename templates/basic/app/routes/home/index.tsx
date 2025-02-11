@@ -52,7 +52,7 @@ const InstallCommand = () => {
   const selectedIndex = options.findIndex(([key]) => key === packageManager)
 
   return (
-    <div className="flex h-em-[48] bg-foreground rounded-em-[6] mt-em-[40] items-center gap-em-[12]">
+    <div className="flex h-em-[48] bg-foreground rounded-em-[6] mt-em-[24] md:mt-em-[40] items-center gap-em-[12]">
       <Select.Root
         value={packageManager}
         onValueChange={(value: string) => setPackageManager(value as keyof typeof PACKAGE_MANAGERS)}
@@ -171,7 +171,9 @@ const Hero = () => {
           <div className="flex">
             {Array.from({ length: 4 }).map((_, index) => (
               <span
-                className={cn('font-semibold uppercase whitespace-nowrap text-em-[96/16] leading-[1] px-em-[16]')}
+                className={cn(
+                  'font-semibold uppercase whitespace-nowrap text-em-[54/16] md:text-em-[96/16] leading-[1] px-em-[16]'
+                )}
                 key={index}
               >
                 @joycostudio/marquee
@@ -226,19 +228,31 @@ const ConfigMarquee = () => {
           >
             <div className="flex">
               {Array.from({ length: 4 }).map((_, index) => (
-                <div className="flex items-center gap-x-em-[48] px-em-[24]" key={index}>
-                  <span className={cn('font-semibold uppercase whitespace-nowrap text-em-[164/16] leading-[1]')}>
+                <div className="flex items-center gap-x-em-[32] md:gap-x-em-[48] px-em-[16] md:px-em-[24]" key={index}>
+                  <span
+                    className={cn(
+                      'font-semibold uppercase whitespace-nowrap text-em-[80/16] md:text-em-[164/16] leading-[1]'
+                    )}
+                  >
                     THE ONLY
                   </span>
-                  <Logo className="size-em-[120/16] mt-em-[12]" />
-                  <span className={cn('font-semibold uppercase whitespace-nowrap text-em-[164/16] leading-[1]')}>
+                  <Logo className="size-em-[80/16] md:size-em-[120/16] mt-em-[12]" />
+                  <span
+                    className={cn(
+                      'font-semibold uppercase whitespace-nowrap text-em-[80/16] md:text-em-[164/16] leading-[1]'
+                    )}
+                  >
                     MARQUEE
                   </span>
-                  <Logo className="size-em-[120/16] mt-em-[12]" />
-                  <span className={cn('font-semibold uppercase whitespace-nowrap text-em-[164/16] leading-[1]')}>
+                  <Logo className="size-em-[80/16] md:size-em-[120/16] mt-em-[12]" />
+                  <span
+                    className={cn(
+                      'font-semibold uppercase whitespace-nowrap text-em-[80/16] md:text-em-[164/16] leading-[1]'
+                    )}
+                  >
                     YOU WILL EVER NEED
                   </span>
-                  <Logo className="size-em-[120/16] mt-em-[12]" />
+                  <Logo className="size-em-[80/16] md:size-em-[120/16] mt-em-[12]" />
                 </div>
               ))}
             </div>
@@ -417,14 +431,14 @@ export default function Home() {
       <ConfigMarquee />
       <div className="h-[400vh] text-primary bg-foreground">
         <Pattern />
-        <div className="sticky top-0 left-0 z-10 flex flex-col items-center justify-center w-full h-screen py-12 font-mono uppercase min-h-max gap-y-10">
+        <div className="sticky top-0 left-0 z-10 flex flex-col items-center justify-center w-full h-screen py-12 font-mono uppercase overflow-x-clip min-h-max gap-y-10">
           <div className="absolute inset-0 overflow-x-clip">
             <div className="absolute py-em-[10/16] rotate-[10deg] left-1/2 -translate-x-1/2 z-10">
               <ScrollBoundMarquee className="w-[120vw]" inverted />
             </div>
 
             <div className="absolute bottom-0 py-em-[10/16] rotate-[-30deg] left-1/2 -translate-x-1/2 z-10">
-              <ScrollBoundMarquee className="w-[120vw]" inverted />
+              <ScrollBoundMarquee className="w-[130vw]" inverted />
             </div>
 
             <div className="absolute bottom-0 py-em-[10/16] rotate-[15deg] left-1/2 -translate-x-1/2 z-10">

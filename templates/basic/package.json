@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "build": "cd ../.. && pnpm build && cd templates/basic && react-router build && node vercel/prepare.js",
-    "dev": "react-router dev",
+    "dev": "react-router dev --host",
     "start": "react-router-serve ./build/server/index.js",
     "typecheck": "react-router typegen && tsc"
   },
