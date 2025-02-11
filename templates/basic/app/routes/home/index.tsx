@@ -75,7 +75,7 @@ const Hero = () => {
 
 const ConfigMarquee = () => {
   const [pxPerSecond, setPxPerSecond] = useState(DEFAULT_SPEED)
-  const [speedFactor, setSpeedFactor] = useState(1)
+  const [speedFactor, setSpeedFactor] = useState(0.2)
   const [direction, setDirection] = useState<1 | -1>(1)
   const [play, setPlay] = useState(true)
 
@@ -160,9 +160,8 @@ const ConfigMarquee = () => {
               className="absolute inset-0"
               style={{
                 background: `linear-gradient(90deg, 
-                  rgba(3, 68, 220, 0.05) 0%,
-                  rgba(3, 68, 220, 0.2) ${speedFactor * 100}%,
-                  rgba(3, 68, 220, 0.05) 100%
+                  rgba(3, 68, 220, ${0.05 + speedFactor * 0.2}) 0%,
+                  rgba(3, 68, 220, ${0.05 + speedFactor * 0.5}) 100%
                 )`,
               }}
             />
@@ -172,7 +171,7 @@ const ConfigMarquee = () => {
               fill="none"
               preserveAspectRatio="repeat"
             >
-              <g opacity="0.1">
+              <g opacity={speedFactor * 0.2 + 0.05}>
                 <path
                   d="M39.7082 64L71.5414 32.1667L39.7082 0.333496M-16 64L15.8333 32.1667L-16 0.333496"
                   stroke="#0344DC"
@@ -217,7 +216,10 @@ const ConfigMarquee = () => {
                 <Slider.Range className="absolute h-full opacity-0" />
               </Slider.Track>
               <Slider.Thumb asChild>
-                <IconButton variant="filled">
+                <IconButton
+                  variant="filled"
+                  className="focus:outline-none focus-visible:ring-2 focus-visible:ring-background/50 active:scale-95 transition-transform"
+                >
                   <DoubleCaretRightIcon className="size-em-[28] text-foreground" />
                 </IconButton>
               </Slider.Thumb>
