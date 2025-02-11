@@ -30,10 +30,7 @@ html,
 body {
   font-size: var(--dynamic-base-size);
   overscroll-behavior: none;
+  color-scheme: dark;
 
-  @apply bg-background dark:bg-zinc-950;
-
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  }
+  @apply bg-background;
 }

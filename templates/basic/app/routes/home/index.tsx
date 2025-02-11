@@ -1,6 +1,8 @@
 import { useRef, useState } from 'react'
 import { Marquee, useMarquee } from '@joycostudio/marquee/react'
-
+import * as Slider from '@radix-ui/react-slider'
+import * as Select from '@radix-ui/react-select'
+import NumberFlow from '@number-flow/react'
 import { useLenis } from '@/lib/scroll'
 import Logo from '@/components/logo'
 import { cn } from '@/lib/cn'
@@ -9,7 +11,9 @@ import ArrowLeftIcon from '@/components/icons/arrow-left'
 import ArrowRightIcon from '@/components/icons/arrow-right'
 import PauseIcon from '@/components/icons/pause'
 import PlayIcon from '@/components/icons/play'
-
+import DoubleCaretRightIcon from '@/components/icons/double-caret-right'
+import CopyIcon from '@/components/icons/copy'
+import CheckIcon from '@/components/icons/check'
 const DEFAULT_SPEED = 300
 
 const Star = () => (
@@ -25,6 +29,60 @@ const Star = () => (
     />
   </svg>
 )
+
+const PACKAGE_MANAGERS = {
+  npm: { display: 'install @joycostudio/marquee', command: 'npm install @joycostudio/marquee' },
+  pnpm: { display: 'add @joycostudio/marquee', command: 'pnpm add @joycostudio/marquee' },
+  yarn: { display: 'add @joycostudio/marquee', command: 'yarn add @joycostudio/marquee' },
+  bun: { display: 'add @joycostudio/marquee', command: 'bun add @joycostudio/marquee' },
+} as const
+
+const InstallCommand = () => {
+  const [packageManager, setPackageManager] = useState<keyof typeof PACKAGE_MANAGERS>('pnpm')
+  const [copied, setCopied] = useState(false)
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(PACKAGE_MANAGERS[packageManager].command)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  return (
+    <div className="flex h-em-[40] w-em-[400] bg-foreground rounded-em-[6] mt-em-[40] items-center gap-em-[12]">
+      <Select.Root
+        value={packageManager}
+        onValueChange={(value: string) => setPackageManager(value as keyof typeof PACKAGE_MANAGERS)}
+      >
+        <Select.Trigger className="text-background font-mono text-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20">
+          <Select.Value />
+        </Select.Trigger>
+        <Select.Portal>
+          <Select.Content className="bg-foreground rounded-em-[6] p-em-[6]">
+            <Select.Viewport>
+              {Object.keys(PACKAGE_MANAGERS).map((pm) => (
+                <Select.Item
+                  key={pm}
+                  value={pm}
+                  className="text-background font-mono text-sm px-em-[8] py-em-[4] rounded-em-[4] outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 cursor-pointer data-[highlighted]:bg-background/10"
+                >
+                  <Select.ItemText>{pm}</Select.ItemText>
+                </Select.Item>
+              ))}
+            </Select.Viewport>
+          </Select.Content>
+        </Select.Portal>
+      </Select.Root>
+      <div className="font-mono text-background text-sm flex-1">{PACKAGE_MANAGERS[packageManager].display}</div>
+      <IconButton
+        variant="outline"
+        onClick={handleCopy}
+        className="border-0 border-l-2 text-background hover:bg-background/10 focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
+      >
+        {copied ? <CheckIcon className="size-em-[20]" /> : <CopyIcon className="size-em-[20]" />}
+      </IconButton>
+    </div>
+  )
+}
 
 const MarqueeContent = ({ className }: { className?: string }) => {
   return (
@@ -87,23 +145,22 @@ const Hero = () => {
         </Marquee>
       </div>
 
-      <div className="flex h-em-[40] w-em-[400] bg-foreground rounded-em-[12] mt-em-[40]"></div>
+      <InstallCommand />
     </div>
   )
 }
 
 const ConfigMarquee = () => {
   const [pxPerSecond, setPxPerSecond] = useState(DEFAULT_SPEED)
-  const [speedFactor, setSpeedFactor] = useState(1)
+  const [speedFactor, setSpeedFactor] = useState(0.2)
   const [direction, setDirection] = useState<1 | -1>(1)
   const [play, setPlay] = useState(true)
-  const [isDragging, setIsDragging] = useState(false)
 
-  const labelClassName = cn('font-mono font-medium uppercase text-em-[16/16]')
+  const labelClassName = cn('font-mono text-background font-medium uppercase text-em-[16/16]')
 
   return (
     <div className="my-em-[150] flex flex-col items-center">
-      <div className="w-full max-w-full flex flex-col items-center text-foreground py-em-[40] bg-foreground/10">
+      <div className="w-full flex flex-col items-center text-foreground py-em-[40] bg-foreground/10">
         <div
           style={{
             maskImage: 'linear-gradient(to right, transparent, black 20%, black 80%, transparent)',
@@ -153,10 +210,15 @@ const ConfigMarquee = () => {
         </div>
       </div>
 
-      <div className="relative flex mx-auto gap-y-12 gap-x-4 mt-em-[-24] items-center justify-center bg-foreground p-em-[32] rounded-em-[12]">
+      <div className="relative flex mx-auto gap-em-[40] mt-em-[-24] items-center justify-center bg-foreground p-em-[32] rounded-em-[12]">
         <div className="flex flex-col gap-em-[8] items-center">
-          <p className="text-sm font-medium font-mono uppercase text-background">State</p>
-          <IconButton size="large" variant={play ? 'outline' : 'filled'} onClick={() => setPlay(!play)}>
+          <p className={labelClassName}>State</p>
+          <IconButton
+            size="large"
+            variant={play ? 'outline' : 'filled'}
+            onClick={() => setPlay(!play)}
+            className="focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
+          >
             {play ? <PauseIcon className="size-em-[32]" /> : <PlayIcon className="size-em-[32]" />}
           </IconButton>
         </div>
@@ -164,61 +226,111 @@ const ConfigMarquee = () => {
         <div className="flex flex-col gap-em-[8] items-center">
           <p className={labelClassName}>Direction</p>
           <div className="flex gap-2">
-            <IconButton size="large" variant={direction === 1 ? 'filled' : 'outline'} onClick={() => setDirection(1)}>
+            <IconButton
+              size="large"
+              variant={direction === 1 ? 'filled' : 'outline'}
+              onClick={() => setDirection(1)}
+              className="focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
+            >
               <ArrowLeftIcon className="size-em-[32]" />
             </IconButton>
-            <IconButton size="large" variant={direction === -1 ? 'filled' : 'outline'} onClick={() => setDirection(-1)}>
+            <IconButton
+              size="large"
+              variant={direction === -1 ? 'filled' : 'outline'}
+              onClick={() => setDirection(-1)}
+              className="focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
+            >
               <ArrowRightIcon className="size-em-[32]" />
             </IconButton>
           </div>
         </div>
 
         <div className="flex flex-col gap-em-[8] items-center">
-          <p className="text-sm font-medium font-mono text-background">Speed (px/s)</p>
-          <div
-            className="relative h-10 bg-background/10 rounded-lg cursor-pointer"
-            onMouseDown={(e) => {
-              setIsDragging(true)
-              const rect = e.currentTarget.getBoundingClientRect()
-              const x = e.clientX - rect.left
-              const percentage = x / rect.width
-              setPxPerSecond(Math.round(percentage * 1000))
-            }}
-            onMouseMove={(e) => {
-              if (!isDragging) return
-              const rect = e.currentTarget.getBoundingClientRect()
-              const x = e.clientX - rect.left
-              const percentage = Math.max(0, Math.min(1, x / rect.width))
-              setPxPerSecond(Math.round(percentage * 1000))
-            }}
-            onMouseUp={() => setIsDragging(false)}
-            onMouseLeave={() => setIsDragging(false)}
-          >
+          <p className={labelClassName}>Speed Factor</p>
+          <div className="relative w-em-[350] border-2 border-background h-em-[64] rounded-em-[6] flex items-center px-em-[6] overflow-hidden">
             <div
-              className="absolute inset-y-0 left-0 bg-background rounded-lg transition-all"
+              className="absolute inset-0"
               style={{
-                width: `${(pxPerSecond / 1000) * 100}%`,
-                backgroundImage: `url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h3l3 3v3H3L0 3z' fill='%23fff' fill-opacity='.1'/%3E%3C/svg%3E")`,
+                background: `linear-gradient(90deg, 
+                  rgba(3, 68, 220, ${0.05 + speedFactor * 0.2}) 0%,
+                  rgba(3, 68, 220, ${0.05 + speedFactor * 0.5}) 100%
+                )`,
               }}
             />
-            <div
-              className="absolute top-1/2 -translate-y-1/2 size-4 bg-foreground border-2 border-background rounded-full transition-all"
-              style={{ left: `${(pxPerSecond / 1000) * 100}%` }}
+            <svg
+              className="absolute inset-0 w-full h-full"
+              viewBox="0 0 372 64"
+              fill="none"
+              preserveAspectRatio="repeat"
+            >
+              <g opacity={speedFactor * 0.2 + 0.05}>
+                <path
+                  d="M39.7082 64L71.5414 32.1667L39.7082 0.333496M-16 64L15.8333 32.1667L-16 0.333496"
+                  stroke="#0344DC"
+                  strokeWidth="15.9166"
+                  strokeLinecap="square"
+                />
+                <path
+                  d="M157.094 64L188.927 32.1667L157.094 0.333496M101.385 64L133.219 32.1667L101.385 0.333496"
+                  stroke="#0344DC"
+                  strokeWidth="15.9166"
+                  strokeLinecap="square"
+                />
+                <path
+                  d="M274.479 64L306.312 32.1667L274.479 0.333496M218.771 64L250.604 32.1667L218.771 0.333496"
+                  stroke="#0344DC"
+                  strokeWidth="15.9166"
+                  strokeLinecap="square"
+                />
+                <path
+                  d="M391.865 64L423.698 32.1667L391.865 0.333496M336.157 64L367.99 32.1667L336.157 0.333496"
+                  stroke="#0344DC"
+                  strokeWidth="15.9166"
+                  strokeLinecap="square"
+                />
+              </g>
+            </svg>
+            <NumberFlow
+              className="absolute left-1/2 -translate-x-1/2 font-mono text-background/80 font-medium"
+              value={Math.round(speedFactor * 100)}
+              suffix="%"
             />
+            <Slider.Root
+              className="relative flex items-center select-none touch-none w-full"
+              value={[speedFactor]}
+              onValueChange={([value]) => setSpeedFactor(value)}
+              max={1}
+              min={0}
+              step={0.01}
+              defaultValue={[1]}
+            >
+              <Slider.Track className="relative grow h-full opacity-0">
+                <Slider.Range className="absolute h-full opacity-0" />
+              </Slider.Track>
+              <Slider.Thumb asChild>
+                <IconButton
+                  variant="filled"
+                  className="focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20 active:scale-95 transition-transform"
+                >
+                  <DoubleCaretRightIcon className="size-em-[28] text-foreground" />
+                </IconButton>
+              </Slider.Thumb>
+            </Slider.Root>
           </div>
         </div>
 
         <div className="flex flex-col gap-em-[8] items-center">
-          <p className={labelClassName}>Speed Factor</p>
+          <p className={labelClassName}>Speed (px/s)</p>
           <div className="flex gap-2">
-            {[0.25, 0.5, 1].map((factor) => (
+            {[100, 300, 500].map((speed) => (
               <IconButton
-                key={factor}
+                key={speed}
                 size="large"
-                variant={speedFactor === factor ? 'filled' : 'outline'}
-                onClick={() => setSpeedFactor(factor)}
+                variant={pxPerSecond === speed ? 'filled' : 'outline'}
+                onClick={() => setPxPerSecond(speed)}
+                className="focus:outline-none focus-visible:ring-2 focus-visible:ring-foreground/20"
               >
-                <span className="text-sm font-medium">{factor}x</span>
+                <span className="text-sm font-medium">{speed}</span>
               </IconButton>
             ))}
           </div>
@@ -257,7 +369,7 @@ export default function Home() {
     <div className="">
       <Hero />
       <ConfigMarquee />
-      <div className="h-[400vh]">
+      <div className="h-[400vh] text-black">
         <div className="h-screen bg-foreground font-mono uppercase py-12 sticky min-h-max items-center left-0 top-0 w-full gap-y-10 flex flex-col justify-center">
           <div className="absolute inset-0 overflow-hidden">
             <div className="absolute py-em-[10/16] rotate-[10deg] left-1/2 -translate-x-1/2 z-10">

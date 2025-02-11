@@ -9,9 +9,9 @@ const iconButtonVariants = cva('flex font-mono font-medium uppercase items-cente
       filled: 'bg-background text-foreground border-2 border-background',
     },
     size: {
-      large: 'size-em-[64] rounded-em-[6] text-em-[18] leading-[1]',
-      medium: 'size-em-[48] rounded-em-[4] text-em-[16] leading-[1]',
-      small: 'size-em-[32] rounded-em-[2] text-em-[14] leading-[1]',
+      large: 'size-em-[64] rounded-em-[6] text-em-[18/16] leading-[1]',
+      medium: 'size-em-[48] rounded-em-[4] text-em-[16/16] leading-[1]',
+      small: 'size-em-[32] rounded-em-[2] text-em-[14/16] leading-[1]',
     },
   },
   defaultVariants: {
