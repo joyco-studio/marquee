@@ -9,7 +9,7 @@ import ArrowLeftIcon from '@/components/icons/arrow-left'
 import ArrowRightIcon from '@/components/icons/arrow-right'
 import PauseIcon from '@/components/icons/pause'
 import PlayIcon from '@/components/icons/play'
-
+import DoubleCaretRightIcon from '@/components/icons/double-caret-right'
 const DEFAULT_SPEED = 300
 
 const MarqueeContent = ({ className }: { className?: string }) => {
@@ -133,9 +133,9 @@ const ConfigMarquee = () => {
         </div>
       </div>
 
-      <div className="relative flex mx-auto gap-y-12 gap-x-4 mt-em-[-24] items-center justify-center bg-foreground p-em-[32] rounded-em-[12]">
+      <div className="relative flex mx-auto gap-em-[40] mt-em-[-24] items-center justify-center bg-foreground p-em-[32] rounded-em-[12]">
         <div className="flex flex-col gap-em-[8] items-center">
-          <p className="text-sm font-medium font-mono uppercase text-background">State</p>
+          <p className={labelClassName}>State</p>
           <IconButton size="large" variant={play ? 'outline' : 'filled'} onClick={() => setPlay(!play)}>
             {play ? <PauseIcon className="size-em-[32]" /> : <PlayIcon className="size-em-[32]" />}
           </IconButton>
@@ -154,9 +154,9 @@ const ConfigMarquee = () => {
         </div>
 
         <div className="flex flex-col gap-em-[8] items-center">
-          <p className="text-sm font-medium font-mono text-background">Speed (px/s)</p>
+          <p className={labelClassName}>Speed (px/s)</p>
           <div
-            className="relative h-10 bg-background/10 rounded-lg cursor-pointer"
+            className="relative w-em-[300] border-2 border-background h-em-[64] bg-background/10 rounded-em-[6] cursor-pointer flex items-center"
             onMouseDown={(e) => {
               setIsDragging(true)
               const rect = e.currentTarget.getBoundingClientRect()
@@ -174,17 +174,13 @@ const ConfigMarquee = () => {
             onMouseUp={() => setIsDragging(false)}
             onMouseLeave={() => setIsDragging(false)}
           >
-            <div
-              className="absolute inset-y-0 left-0 bg-background rounded-lg transition-all"
-              style={{
-                width: `${(pxPerSecond / 1000) * 100}%`,
-                backgroundImage: `url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0h3l3 3v3H3L0 3z' fill='%23fff' fill-opacity='.1'/%3E%3C/svg%3E")`,
-              }}
-            />
-            <div
-              className="absolute top-1/2 -translate-y-1/2 size-4 bg-foreground border-2 border-background rounded-full transition-all"
+            <IconButton
+              variant="filled"
+              className="cursor-grab absolute"
               style={{ left: `${(pxPerSecond / 1000) * 100}%` }}
-            />
+            >
+              <DoubleCaretRightIcon className="size-em-[32]" />
+            </IconButton>
           </div>
         </div>
 
