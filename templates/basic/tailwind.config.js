@@ -33,7 +33,7 @@ export default {
       },
       colors: {
         primary: {
-          DEFAULT: '#ffffff',
+          DEFAULT: '#181617',
           foreground: '#000000',
           background: '#ffffff',
         },
@@ -43,7 +43,7 @@ export default {
           background: '#000000',
         },
         background: '#0344dc',
-        foreground: '#ffffff',
+        foreground: '#fafafa',
         muted: {
           DEFAULT: '#000000',
           foreground: '#ffffff',
