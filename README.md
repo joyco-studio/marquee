@@ -97,7 +97,7 @@ The `useMarquee` hook returns a tuple containing:
 
 ## Can I use it in [place the latest top-notch high-performance new tech framework here]?
 
-This page is not strictly bound to React, it has a core package and a React implementation of that core functionality. So feel free to create you own implementation in your favorite framework. And if your heart is big enough, leave a PR for the community. The rebels will thank your service 🫡.
+This library is not strictly bound to React, it has a core package and a React implementation of that core functionality. So feel free to create you own implementation in your favorite framework. And if your heart is big enough, leave a PR for the community. The rebels will thank your service 🫡.
 
 <br/>
 
