@@ -167,7 +167,7 @@ const Hero = () => {
         }}
         className="w-full max-w-full lg:max-w-em-[1000]"
       >
-        <Marquee speed={75} direction={1} play={true}>
+        <Marquee speed={75} direction={1}>
           <div className="flex">
             {Array.from({ length: 4 }).map((_, index) => (
               <span
@@ -205,7 +205,7 @@ const ConfigMarquee = () => {
           }}
           className="w-full max-w-full"
         >
-          <Marquee speed={75} direction={1} play={true}>
+          <Marquee speed={75} direction={1}>
             <div className="flex opacity-50">
               {Array.from({ length: 10 }).map((_, index) => (
                 <span
