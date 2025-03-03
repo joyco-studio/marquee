@@ -1,6 +1,6 @@
 import { MarqueeConfig } from './core'
 
-export const pxPerSecond = (px: number, seconds: number) => (px / seconds) * 1000
+export const pxPerSecond = (width: number, speed: number) => (width / speed) * 1000
 
 export const warn = (message: string) => {
   if (MarqueeConfig.disableWarnings) return

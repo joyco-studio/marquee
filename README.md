@@ -86,6 +86,41 @@ The `useMarquee` hook returns a tuple containing:
   - `setDirection(direction: 1 | -1)`: Change the scroll direction
   - `destroy()`: Clean up the marquee (automatically called on unmount)
 
+#### Plain HTML Usage
+
+For vanilla JavaScript applications, you can use the core package directly via CDN:
+
+```html
+<body>
+  <main>
+    <div id="marquee-wrapper">
+      <div id="marquee-root">
+        <div style="white-space: nowrap">
+          Hey there! | Hey there! | Hey there! | Hey there! | Hey there! | Hey there! | Hey there! | Hey there! |&nbsp;
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import { Marquee } from 'https://cdn.jsdelivr.net/npm/@joycostudio/marquee/dist/core.min.mjs'
+
+    const marqueeChildElm = document.getElementById('marquee-root')
+
+    const marqueeInstance = new Marquee(marqueeChildElm, {
+      speed: 500,
+      direction: 1,
+      speedFactor: 1,
+    })
+
+    marqueeInstance.initialize(marqueeChildElm.children[0])
+    marqueeInstance.play()
+  </script>
+</body>
+```
+
+> Check the live example: https://stackblitz.com/edit/joyco-marquee-static?file=index.html
+
 #### Notes
 
 - The marquee component only supports a single child element. Wrap multiple elements in a container if needed.
