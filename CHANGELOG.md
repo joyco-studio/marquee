@@ -1,5 +1,11 @@
 # @joycostudio/marquee
 
+## 0.0.8
+
+### Patch Changes
+
+- c7d7f3c: fix double root.appendChild issue
+
 ## 0.0.7
 
 ### Patch Changes
