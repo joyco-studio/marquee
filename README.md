@@ -19,7 +19,7 @@ JOYCO Marquee leverages the Web Animations API (WAAPI) to create smooth, perform
 #### Basic Usage
 
 ```tsx
-import { Marquee } from '@joycostudio/marquee'
+import { Marquee } from '@joycostudio/marquee/react'
 
 function App() {
   return (
@@ -50,7 +50,7 @@ For more control, you can use the `useMarquee` hook. This is particularly useful
 Let's make an example with [lenis](https://github.com/darkroomengineering/lenis) from darkroom.engineering.
 
 ```tsx
-import { useMarquee, Marquee } from '@joycostudio/marquee'
+import { useMarquee, Marquee } from '@joycostudio/marquee/react'
 import { useLenis } from 'lenis'
 
 const ScrollVelocityBoundMarquee = ({ inverted }: { inverted?: boolean }) => {

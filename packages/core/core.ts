@@ -37,8 +37,6 @@ class Marquee {
       warn('Marquee already initialized!')
       return
     }
-    this.root.appendChild(child)
-    // Clone the child for continuous movement
     this.clonedChild = child.cloneNode(true) as HTMLElement
     this.root.appendChild(this.clonedChild)
     this.childWidth = child.offsetWidth
