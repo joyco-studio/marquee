@@ -86,6 +86,13 @@ The `useMarquee` hook returns a tuple containing:
   - `setDirection(direction: 1 | -1)`: Change the scroll direction
   - `destroy()`: Clean up the marquee (automatically called on unmount)
 
+#### Notes
+
+- The marquee component only supports a single child element. Wrap multiple elements in a container if needed.
+- The marquee automatically handles cleanup on unmount.
+- The component provides built-in styles for proper overflow handling and content positioning.
+- You are responsible for making the marquee cover the full width of it's render area. This library **DOES NOT** auto-fill that space.
+
 #### Plain HTML Usage
 
 For vanilla JavaScript applications, you can use the core package directly via CDN:
@@ -120,13 +127,6 @@ For vanilla JavaScript applications, you can use the core package directly via C
 ```
 
 > Check the live example: https://stackblitz.com/edit/joyco-marquee-static?file=index.html
-
-#### Notes
-
-- The marquee component only supports a single child element. Wrap multiple elements in a container if needed.
-- The marquee automatically handles cleanup on unmount.
-- The component provides built-in styles for proper overflow handling and content positioning.
-- You are responsible for making the marquee cover the full width of it's render area. This library **DOES NOT** auto-fill that space.
 
 <br/>
 
