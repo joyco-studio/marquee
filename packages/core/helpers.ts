@@ -8,7 +8,7 @@ export const warn = (message: string) => {
 }
 
 export const error = (message: string) => {
-  throw new Error(`[@joycostudio/marquee]: ${message}`)
+  console.error(`[@joycostudio/marquee]: ${message}`)
 }
 
 export const cn = (...classes: (string | undefined | null)[]) => classes.filter(Boolean).join(' ')
