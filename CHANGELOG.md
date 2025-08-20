@@ -1,5 +1,11 @@
 # @joycostudio/marquee
 
+## 0.0.10
+
+### Patch Changes
+
+- ccaa697: fix resize
+
 ## 0.0.9
 
 ### Patch Changes
