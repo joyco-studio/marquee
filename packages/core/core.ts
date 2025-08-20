@@ -7,6 +7,7 @@ type MarqueeOptions = {
   speed?: number
   speedFactor?: number
   direction?: 1 | -1
+  onReady?: () => void
 }
 
 class Marquee {
@@ -19,17 +20,21 @@ class Marquee {
   private childWidth: number | undefined
   private clonedChild: HTMLElement | undefined
   public playing: boolean = false
+  private onReady?: () => void
+  private resizeObserver: ResizeObserver | undefined
+  private originalChild: HTMLElement | undefined
 
   /**
    * @param {HTMLElement} root - The container that will contain the marquee.
    * @param {Object} options - The options for the marquee.
    * @param {number} [options.speed=1] - The speed of the marquee in pixels per second.
    */
-  constructor(root: HTMLElement, { speed = 10 / 1, speedFactor = 1, direction = 1 }: MarqueeOptions = {}) {
+  constructor(root: HTMLElement, { speed = 10 / 1, speedFactor = 1, direction = 1, onReady }: MarqueeOptions = {}) {
     this.root = root
     this.speed = speed
     this.speedFactor = speedFactor
     this.direction = direction
+    this.onReady = onReady
   }
 
   initialize(child: HTMLElement) {
@@ -37,12 +42,15 @@ class Marquee {
       warn('Marquee already initialized!')
       return
     }
+    this.originalChild = child
     this.clonedChild = child.cloneNode(true) as HTMLElement
     this.root.appendChild(this.clonedChild)
     this.childWidth = child.offsetWidth
     this.playing = true
     this.start(this.direction)
+    this.setupResizeObserver()
     this.initialized = true
+    this.onReady?.()
   }
 
   play() {
@@ -151,16 +159,62 @@ class Marquee {
     this.playing = false
   }
 
+  /**
+   * Manually update the child size and restart animation if needed.
+   * This is automatically handled via ResizeObserver, but can be called manually if needed.
+   */
+  updateSize() {
+    this.updateChildSize()
+  }
+
+  private setupResizeObserver() {
+    if (!this.originalChild) return
+
+    this.resizeObserver = new ResizeObserver(() => {
+      this.updateChildSize()
+    })
+
+    this.resizeObserver.observe(this.originalChild)
+  }
+
+  private updateChildSize() {
+    if (!this.originalChild || !this.initialized || !this.animation || !this.animation.effect) return
+
+    const newWidth = this.originalChild.offsetWidth
+
+    console.log('newWidth', newWidth, 'oldWidth', this.childWidth)
+
+    if (newWidth !== this.childWidth) {
+      const currentProgress = this.animation.effect.getComputedTiming()
+      this.childWidth = newWidth
+
+      // Update the cloned child to match the original
+      if (this.clonedChild && this.clonedChild.parentNode === this.root) {
+        this.root.removeChild(this.clonedChild)
+      }
+      this.clonedChild = this.originalChild.cloneNode(true) as HTMLElement
+      this.root.appendChild(this.clonedChild)
+
+      // Restart the animation with updated width and preserve progress
+      this.start(this.direction, currentProgress.progress ?? undefined)
+    }
+  }
+
   destroy() {
     // Cancel the animation
     this.animation?.cancel()
     this.animation = undefined
 
-    // Remove the cloned child if it exists
-    if (this.clonedChild && this.clonedChild.parentNode === this.root) {
-      this.root.removeChild(this.clonedChild)
-    }
+    // Disconnect resize observer
+    this.resizeObserver?.disconnect()
+    this.resizeObserver = undefined
+
+    // // Remove the cloned child if it exists
+    // if (this.clonedChild && this.clonedChild.parentNode === this.root) {
+    //   this.root.removeChild(this.clonedChild)
+    // }
     this.clonedChild = undefined
+    this.originalChild = undefined
   }
 }
 
