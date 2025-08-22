@@ -8,7 +8,7 @@
     "type": "git",
     "url": "https://github.com/joyco-studio/marquee"
   },
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Just a marquee",
   "main": "dist/core.js",
   "module": "dist/core.mjs",
