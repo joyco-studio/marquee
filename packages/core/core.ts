@@ -182,8 +182,6 @@ class Marquee {
 
     const newWidth = this.originalChild.offsetWidth
 
-    console.log('newWidth', newWidth, 'oldWidth', this.childWidth)
-
     if (newWidth !== this.childWidth) {
       const currentProgress = this.animation.effect.getComputedTiming()
       this.childWidth = newWidth
