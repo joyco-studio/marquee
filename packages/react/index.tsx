@@ -29,7 +29,6 @@ const useMarquee = <T extends HTMLDivElement>({
 
     if (children.length === 0) return
     if (children.length > 1) {
-      console.log('error', rootRef.current)
       error('Marquee does not support multiple children. Wrap it up in a single element.')
     }
 

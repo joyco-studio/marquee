@@ -209,7 +209,6 @@ class Marquee {
 
     // Remove the cloned child if it exists
     if (this.clonedChild && this.clonedChild.parentNode === this.root) {
-      console.log('remove cloned child', this.clonedChild)
       this.root.removeChild(this.clonedChild)
     }
     this.clonedChild = undefined
