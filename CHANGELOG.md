@@ -1,5 +1,11 @@
 # @joycostudio/marquee
 
+## 0.0.12
+
+### Patch Changes
+
+- f50bbf0: Fix multiple children error by fixing the destroy callback
+
 ## 0.0.11
 
 ### Patch Changes
