@@ -4,7 +4,7 @@ export const isServer = typeof window === 'undefined'
 
 export const isClient = typeof window !== 'undefined'
 
-export const isDevelopment = import.meta.env.NODE_ENV === 'development'
+export const isDevelopment = import.meta.env.MODE === 'development'
 
 const base_url =
   import.meta.env.VITE_VERCEL_PROJECT_PRODUCTION_URL || import.meta.env.VITE_VERCEL_URL || import.meta.env.VITE_SITE_URL
