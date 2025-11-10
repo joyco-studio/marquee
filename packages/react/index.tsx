@@ -29,22 +29,20 @@ const useMarquee = <T extends HTMLDivElement>({
 
     if (children.length === 0) return
     if (children.length > 1) {
-      console.log(children)
+      console.log('error', rootRef.current)
       error('Marquee does not support multiple children. Wrap it up in a single element.')
     }
 
     marquee.initialize(children[0] as HTMLElement)
+
+    return () => marquee.destroy()
   }, [])
 
   useEffect(() => {
     if (!marquee) return
     if (play) marquee.play()
     else marquee.pause()
-  }, [play])
-
-  useEffect(() => {
-    return () => marquee?.destroy()
-  }, [])
+  }, [play, marquee])
 
   return [rootRef, marquee] as const
 }
