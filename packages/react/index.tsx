@@ -33,17 +33,15 @@ const useMarquee = <T extends HTMLDivElement>({
     }
 
     marquee.initialize(children[0] as HTMLElement)
+
+    return () => marquee.destroy()
   }, [])
 
   useEffect(() => {
     if (!marquee) return
     if (play) marquee.play()
     else marquee.pause()
-  }, [play])
-
-  useEffect(() => {
-    return () => marquee?.destroy()
-  }, [])
+  }, [play, marquee])
 
   return [rootRef, marquee] as const
 }

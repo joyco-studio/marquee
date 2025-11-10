@@ -1,5 +1,11 @@
 # @joycostudio/marquee
 
+## 0.0.11
+
+### Patch Changes
+
+- cab8d90: remove clg lol
+
 ## 0.0.10
 
 ### Patch Changes

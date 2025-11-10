@@ -207,10 +207,10 @@ class Marquee {
     this.resizeObserver?.disconnect()
     this.resizeObserver = undefined
 
-    // // Remove the cloned child if it exists
-    // if (this.clonedChild && this.clonedChild.parentNode === this.root) {
-    //   this.root.removeChild(this.clonedChild)
-    // }
+    // Remove the cloned child if it exists
+    if (this.clonedChild && this.clonedChild.parentNode === this.root) {
+      this.root.removeChild(this.clonedChild)
+    }
     this.clonedChild = undefined
     this.originalChild = undefined
   }
