@@ -75,8 +75,8 @@ class Marquee {
     const duration = pxPerSecond(this.childWidth, this.speed)
     const keyframes =
       direction === 1
-        ? [{ transform: 'translateX(0%)' }, { transform: 'translateX(-50%)' }]
-        : [{ transform: 'translateX(-50%)' }, { transform: 'translateX(0%)' }]
+        ? [{ transform: 'translate3d(0%,0,0)' }, { transform: 'translate3d(-50%,0,0)' }]
+        : [{ transform: 'translate3d(-50%,0,0)' }, { transform: 'translate3d(0%,0,0)' }]
 
     this.animation = this.root.animate(keyframes, {
       duration,
