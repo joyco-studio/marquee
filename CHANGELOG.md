@@ -1,5 +1,12 @@
 # @joycostudio/marquee
 
+## 0.0.13
+
+### Patch Changes
+
+- 4ae558e: use translate3d
+- 505ad94: add autoClone option
+
 ## 0.0.12
 
 ### Patch Changes
