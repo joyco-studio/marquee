@@ -7,6 +7,7 @@ type MarqueeOptions = {
   speedFactor?: number
   direction: 1 | -1
   play?: boolean
+  autoClone?: boolean
   onReady?: () => void
 }
 
@@ -15,6 +16,7 @@ const useMarquee = <T extends HTMLDivElement>({
   speedFactor = 1,
   direction,
   play = true,
+  autoClone = true,
   onReady,
 }: MarqueeOptions) => {
   const rootRef = useRef<T>(null)
@@ -22,12 +24,13 @@ const useMarquee = <T extends HTMLDivElement>({
 
   useEffect(() => {
     if (!rootRef.current) return
-    const marquee = new Marquee(rootRef.current, { speed, direction, speedFactor, onReady })
+    const marquee = new Marquee(rootRef.current, { speed, direction, speedFactor, autoClone, onReady })
     setMarquee(marquee)
 
     const children = rootRef.current.children
 
     if (children.length === 0) return
+
     if (children.length > 1) {
       error('Marquee does not support multiple children. Wrap it up in a single element.')
     }
@@ -69,11 +72,12 @@ const ReactMarqueeConfig = ({
   speedFactor = 1,
   direction,
   play = true,
+  autoClone = true,
   rootClassName,
   marqueeClassName,
   onReady,
 }: ReactMarqueeConfigProps) => {
-  const [rootRef, marquee] = useMarquee({ speed, speedFactor, direction, play, onReady })
+  const [rootRef, marquee] = useMarquee({ speed, speedFactor, direction, play, autoClone, onReady })
 
   useEffect(() => {
     if (!marquee) return

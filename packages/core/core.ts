@@ -7,6 +7,7 @@ type MarqueeOptions = {
   speed?: number
   speedFactor?: number
   direction?: 1 | -1
+  autoClone?: boolean
   onReady?: () => void
 }
 
@@ -23,18 +24,19 @@ class Marquee {
   private onReady?: () => void
   private resizeObserver: ResizeObserver | undefined
   private originalChild: HTMLElement | undefined
-
+  private autoClone: boolean
   /**
    * @param {HTMLElement} root - The container that will contain the marquee.
    * @param {Object} options - The options for the marquee.
    * @param {number} [options.speed=1] - The speed of the marquee in pixels per second.
    */
-  constructor(root: HTMLElement, { speed = 10 / 1, speedFactor = 1, direction = 1, onReady }: MarqueeOptions = {}) {
+  constructor(root: HTMLElement, { speed = 10 / 1, speedFactor = 1, direction = 1, autoClone = true, onReady }: MarqueeOptions = {}) {
     this.root = root
     this.speed = speed
     this.speedFactor = speedFactor
     this.direction = direction
     this.onReady = onReady
+    this.autoClone = autoClone
   }
 
   initialize(child: HTMLElement) {
@@ -43,8 +45,12 @@ class Marquee {
       return
     }
     this.originalChild = child
-    this.clonedChild = child.cloneNode(true) as HTMLElement
-    this.root.appendChild(this.clonedChild)
+    
+    if (this.autoClone) {
+      this.clonedChild = child.cloneNode(true) as HTMLElement
+      this.root.appendChild(this.clonedChild)
+    }
+    
     this.childWidth = child.offsetWidth
     this.playing = true
     this.start(this.direction)
@@ -69,7 +75,6 @@ class Marquee {
   start(direction: 1 | -1, startProgress?: number) {
     if (!this.childWidth) return
 
-    // If there's an existing animation, cancel it
     this.animation?.cancel()
 
     const duration = pxPerSecond(this.childWidth, this.speed)
@@ -186,14 +191,15 @@ class Marquee {
       const currentProgress = this.animation.effect.getComputedTiming()
       this.childWidth = newWidth
 
-      // Update the cloned child to match the original
       if (this.clonedChild && this.clonedChild.parentNode === this.root) {
         this.root.removeChild(this.clonedChild)
       }
-      this.clonedChild = this.originalChild.cloneNode(true) as HTMLElement
-      this.root.appendChild(this.clonedChild)
 
-      // Restart the animation with updated width and preserve progress
+      if (this.autoClone) {
+        this.clonedChild = this.originalChild.cloneNode(true) as HTMLElement
+        this.root.appendChild(this.clonedChild)
+      }
+
       this.start(this.direction, currentProgress.progress ?? undefined)
     }
   }
